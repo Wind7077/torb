@@ -26,6 +26,7 @@ fi
 # ============================================
 
 COUNT=$(grep -c '^webtunnel ' "$FILE" || true)
+SNI_COUNT=$(grep -c 'sni-imitation=' "$FILE" || true)
 
 # ============================================
 # Send Telegram message
@@ -45,52 +46,50 @@ send_msg() {
 }
 
 # ============================================
-# Normalize bridge line
+# Clean line for Tor VPN Beta
+# Removes:
+# - CRLF
+# - sni-imitation
 # ============================================
 
-normalize_bridge() {
+clean_for_torvpn() {
   local line="$1"
 
   # remove CRLF
   line="${line//$'\r'/}"
 
-  # process sni-imitation
-  if [[ "$line" =~ sni-imitation=([^[:space:]]+) ]]; then
-
-    sni_list="${BASH_REMATCH[1]}"
-
-    # first domain only
-    first_sni="${sni_list%%,*}"
-
-    # remove www.
-    first_sni="${first_sni#www.}"
-
-    # replace whole sni-imitation field
-    line=$(echo "$line" | sed -E \
-      "s/sni-imitation=[^ ]+/sni-imitation=${first_sni}/")
-  fi
+  # remove sni-imitation=...
+  line=$(echo "$line" | sed -E 's/ sni-imitation=[^ ]+//g')
 
   echo "$line"
 }
 
 # ============================================
-# Send bridges block
+# Clean RAW SNI line
+# - keep sni-imitation
+# - remove www.
+# ============================================
+
+clean_raw_sni() {
+  local line="$1"
+
+  # remove CRLF
+  line="${line//$'\r'/}"
+
+  # remove all www.
+  line="${line//www./}"
+
+  echo "$line"
+}
+
+# ============================================
+# Send PRE block
 # ============================================
 
 send_block() {
-  local lines="$1"
+  local text="$1"
 
-  local cleaned=""
-
-  while IFS= read -r line; do
-    [[ -z "$line" ]] && continue
-
-    line=$(normalize_bridge "$line")
-
-    cleaned+="${line}"$'\n'
-  done <<< "$lines"
-
-  send_msg "<pre><code>${cleaned}</code></pre>"
+  send_msg "<pre><code>${text}</code></pre>"
 }
 
 # ============================================
@@ -98,11 +97,15 @@ send_block() {
 # ============================================
 
 send_msg "🧅 WEBTUNNEL bridges — ${COUNT} шт.
+⭐ SNI bridges: ${SNI_COUNT} шт.
 🕐 $(date -u '+%Y-%m-%d %H:%M UTC')"
 
 # ============================================
-# Send bridges
+# SECTION 1
+# Compatible with Tor VPN Beta
 # ============================================
+
+send_msg "✅ Tor VPN Beta compatible bridges:"
 
 i=0
 chunk=""
@@ -111,6 +114,8 @@ while IFS= read -r line; do
 
   [[ "$line" =~ ^# ]] && continue
   [[ -z "$line" ]] && continue
+
+  line=$(clean_for_torvpn "$line")
 
   if [ $i -eq 0 ]; then
     chunk="$line"
@@ -130,6 +135,44 @@ while IFS= read -r line; do
 done < <(grep '^webtunnel ' "$FILE")
 
 [[ -n "$chunk" ]] && send_block "$chunk"
+
+# ============================================
+# SECTION 2
+# RAW SNI bridges
+# ============================================
+
+if [ "$SNI_COUNT" -gt 0 ]; then
+
+  send_msg "⭐ RAW bridges with sni-imitation (for clients that support it):"
+
+  i=0
+  chunk=""
+
+  while IFS= read -r line; do
+
+    [[ -z "$line" ]] && continue
+
+    line=$(clean_raw_sni "$line")
+
+    if [ $i -eq 0 ]; then
+      chunk="$line"
+    else
+      chunk+=$'\n'"$line"
+    fi
+
+    i=$((i + 1))
+
+    if [ $i -eq 10 ]; then
+      send_block "$chunk"
+
+      chunk=""
+      i=0
+    fi
+
+  done < <(grep 'sni-imitation=' "$FILE")
+
+  [[ -n "$chunk" ]] && send_block "$chunk"
+fi
 
 # ============================================
 # Done
