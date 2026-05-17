@@ -8,7 +8,7 @@ set -euo pipefail
 FILE="webtunnel.txt"
 
 # ============================================
-# Check required ENV variables
+# Check ENV variables
 # ============================================
 
 if [[ -z "${BOT_TOKEN:-}" ]]; then
@@ -47,14 +47,17 @@ send_msg() {
 
 # ============================================
 # Normalize bridge line
-# Removes www. from sni-imitation
+# Removes ALL www.
 # ============================================
 
 normalize_bridge() {
   local line="$1"
 
-  line=$(echo "$line" | sed -E \
-    's/(sni-imitation=)www\.([A-Za-z0-9.-]+)/\1\2/g')
+  # remove CRLF
+  line="${line//$'\r'/}"
+
+  # remove all www.
+  line="${line//www./}"
 
   echo "$line"
 }
