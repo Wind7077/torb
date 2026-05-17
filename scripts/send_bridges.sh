@@ -13,6 +13,7 @@ send_msg() {
 }
 
 send_block() {
+  # Каждая строка на новой строке, без пустых строк между ними
   local lines="$1"
   local text
   text=$(printf '```\n%s\n```' "$lines")
@@ -35,15 +36,20 @@ if [ -n "$SNI_LINES" ]; then
   chunk=""
   while IFS= read -r line; do
     [[ -z "$line" ]] && continue
-    chunk="${chunk}${line}"$'\n'
+    # Добавляем строку без пустой строки после
+    if [ $i -eq 0 ]; then
+      chunk="$line"
+    else
+      chunk="${chunk}"$'\n'"$line"
+    fi
     i=$((i+1))
     if [ $i -eq 10 ]; then
-      send_block "${chunk%$'\n'}"
+      send_block "$chunk"
       chunk=""
       i=0
     fi
   done <<< "$SNI_LINES"
-  [ -n "$chunk" ] && send_block "${chunk%$'\n'}"
+  [ -n "$chunk" ] && send_block "$chunk"
 fi
 
 # Остальные bridges
@@ -54,14 +60,18 @@ while IFS= read -r line; do
   [[ "$line" =~ ^# ]] && continue
   [[ -z "$line" ]] && continue
   [[ "$line" == *"sni-imitation"* ]] && continue
-  chunk="${chunk}${line}"$'\n'
+  if [ $i -eq 0 ]; then
+    chunk="$line"
+  else
+    chunk="${chunk}"$'\n'"$line"
+  fi
   i=$((i+1))
   if [ $i -eq 15 ]; then
-    send_block "${chunk%$'\n'}"
+    send_block "$chunk"
     chunk=""
     i=0
   fi
 done < <(grep '^webtunnel ' webtunnel.txt)
-[ -n "$chunk" ] && send_block "${chunk%$'\n'}"
+[ -n "$chunk" ] && send_block "$chunk"
 
 send_msg "✅ Готово! Отправлено: ${COUNT} bridges."
