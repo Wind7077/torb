@@ -8,12 +8,20 @@ send_msg() {
   curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
     -d chat_id="${CHAT_ID}" \
     -d parse_mode="HTML" \
+    -d disable_web_page_preview="true" \
     --data-urlencode "text=$1"
   sleep 0.5
 }
 
 send_block() {
-  send_msg "<pre>$1</pre>"
+  # Каждый мост в отдельном <code> — не кликабельно, копируется чисто
+  local lines="$1"
+  local text=""
+  while IFS= read -r line; do
+    [[ -z "$line" ]] && continue
+    text="${text}<code>${line}</code>"$'\n'
+  done <<< "$lines"
+  send_msg "$text"
 }
 
 # Заголовок
