@@ -15,11 +15,6 @@ jobs:
             "https://raw.githubusercontent.com/Delta-Kronecker/Tor-Bridges-Collector/main/bridge/webtunnel_tested.txt" \
             -o webtunnel.txt
 
-          # obfs4 — закомментировано
-          # curl -fsSL \
-          #   "https://raw.githubusercontent.com/Delta-Kronecker/Tor-Bridges-Collector/main/bridge/obfs4_tested.txt" \
-          #   -o obfs4.txt
-
       - name: Send webtunnel bridges to Telegram
         run: |
           BOT_TOKEN="${{ secrets.TG_BOT_TOKEN }}"
@@ -29,70 +24,65 @@ jobs:
           SNI_COUNT=$(grep -c 'sni-imitation' webtunnel.txt || true)
 
           send_msg() {
+            local TEXT="$1"
             curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
               -d chat_id="${CHAT_ID}" \
               -d parse_mode="Markdown" \
-              --data-urlencode "text=$1"
+              --data-urlencode "text=${TEXT}"
             sleep 0.5
+          }
+
+          send_block() {
+            # Принимает строки, оборачивает в ``` без лишних пробелов
+            local LINES="$1"
+            local TEXT
+            TEXT="$(printf '```\n%s\n```' "${LINES}")"
+            send_msg "${TEXT}"
           }
 
           # Заголовок
           send_msg "🧅 *WEBTUNNEL bridges* — ${COUNT} шт.
-          ⭐ С SNI-imitation: ${SNI_COUNT} шт.
-          🕐 $(date -u '+%Y-%m-%d %H:%M UTC')
+⭐ С SNI-imitation: ${SNI_COUNT} шт.
+🕐 $(date -u '+%Y-%m-%d %H:%M UTC')
 
-          _Нажми Copy на блоке — скопируются все мосты сразу_
-          _Блоки ⭐ SNI лучше обходят белые списки РФ_"
+_Нажми Copy на блоке — скопируются все мосты сразу_
+_Блоки ⭐ SNI лучше обходят белые списки РФ_"
 
           # ── SNI bridges ──────────────────────────────────────
           SNI_LINES=$(grep 'sni-imitation' webtunnel.txt || true)
           if [ -n "$SNI_LINES" ]; then
             send_msg "⭐ *Bridges с SNI-imitation:*"
-
             i=0
             chunk=""
             while IFS= read -r line; do
               [[ -z "$line" ]] && continue
-              chunk="${chunk}${line}
-          "
+              chunk="${chunk}${line}"$'\n'
               i=$((i+1))
               if [ $i -eq 10 ]; then
-                send_msg "\`\`\`
-          ${chunk}\`\`\`"
+                send_block "${chunk%$'\n'}"
                 chunk=""
                 i=0
               fi
             done <<< "$SNI_LINES"
-
-            if [ -n "$chunk" ]; then
-              send_msg "\`\`\`
-          ${chunk}\`\`\`"
-            fi
+            [ -n "$chunk" ] && send_block "${chunk%$'\n'}"
           fi
 
           # ── Остальные bridges ────────────────────────────────
           send_msg "🌐 *Остальные webtunnel bridges:*"
-
           i=0
           chunk=""
           while IFS= read -r line; do
             [[ "$line" =~ ^# ]] && continue
             [[ -z "$line" ]] && continue
             [[ "$line" == *"sni-imitation"* ]] && continue
-            chunk="${chunk}${line}
-          "
+            chunk="${chunk}${line}"$'\n'
             i=$((i+1))
             if [ $i -eq 15 ]; then
-              send_msg "\`\`\`
-          ${chunk}\`\`\`"
+              send_block "${chunk%$'\n'}"
               chunk=""
               i=0
             fi
           done < <(grep '^webtunnel ' webtunnel.txt)
-
-          if [ -n "$chunk" ]; then
-            send_msg "\`\`\`
-          ${chunk}\`\`\`"
-          fi
+          [ -n "$chunk" ] && send_block "${chunk%$'\n'}"
 
           send_msg "✅ Готово! Отправлено: ${COUNT} bridges."
