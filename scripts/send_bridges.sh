@@ -26,7 +26,6 @@ fi
 # ============================================
 
 COUNT=$(grep -c '^webtunnel ' "$FILE" || true)
-SNI_COUNT=$(grep -c 'sni-imitation' "$FILE" || true)
 
 # ============================================
 # Send Telegram message
@@ -47,7 +46,6 @@ send_msg() {
 
 # ============================================
 # Normalize bridge line
-# Removes ALL www.
 # ============================================
 
 normalize_bridge() {
@@ -56,15 +54,27 @@ normalize_bridge() {
   # remove CRLF
   line="${line//$'\r'/}"
 
-  # remove all www.
-  line="${line//www./}"
+  # process sni-imitation
+  if [[ "$line" =~ sni-imitation=([^[:space:]]+) ]]; then
+
+    sni_list="${BASH_REMATCH[1]}"
+
+    # first domain only
+    first_sni="${sni_list%%,*}"
+
+    # remove www.
+    first_sni="${first_sni#www.}"
+
+    # replace whole sni-imitation field
+    line=$(echo "$line" | sed -E \
+      "s/sni-imitation=[^ ]+/sni-imitation=${first_sni}/")
+  fi
 
   echo "$line"
 }
 
 # ============================================
 # Send bridges block
-# One PRE block = one Copy Code button
 # ============================================
 
 send_block() {
@@ -88,49 +98,11 @@ send_block() {
 # ============================================
 
 send_msg "🧅 WEBTUNNEL bridges — ${COUNT} шт.
-⭐ С SNI-imitation: ${SNI_COUNT} шт.
 🕐 $(date -u '+%Y-%m-%d %H:%M UTC')"
 
 # ============================================
-# Send SNI bridges first
+# Send bridges
 # ============================================
-
-if [ "$SNI_COUNT" -gt 0 ]; then
-
-  send_msg "⭐ Bridges с SNI-imitation:"
-
-  i=0
-  chunk=""
-
-  while IFS= read -r line; do
-
-    [[ -z "$line" ]] && continue
-
-    if [ $i -eq 0 ]; then
-      chunk="$line"
-    else
-      chunk+=$'\n'"$line"
-    fi
-
-    i=$((i + 1))
-
-    if [ $i -eq 10 ]; then
-      send_block "$chunk"
-
-      chunk=""
-      i=0
-    fi
-
-  done < <(grep 'sni-imitation' "$FILE")
-
-  [[ -n "$chunk" ]] && send_block "$chunk"
-fi
-
-# ============================================
-# Send remaining bridges
-# ============================================
-
-send_msg "🌐 Остальные WEBTUNNEL bridges:"
 
 i=0
 chunk=""
@@ -139,7 +111,6 @@ while IFS= read -r line; do
 
   [[ "$line" =~ ^# ]] && continue
   [[ -z "$line" ]] && continue
-  [[ "$line" == *"sni-imitation"* ]] && continue
 
   if [ $i -eq 0 ]; then
     chunk="$line"
