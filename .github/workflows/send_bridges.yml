@@ -28,61 +28,50 @@ jobs:
           COUNT=$(grep -c '^webtunnel ' webtunnel.txt || true)
           SNI_COUNT=$(grep -c 'sni-imitation' webtunnel.txt || true)
 
-          # Заголовок
-          curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
-            -d chat_id="${CHAT_ID}" \
-            -d parse_mode="Markdown" \
-            -d text="🧅 *WEBTUNNEL bridges* — ${COUNT} шт.
-          ⭐ С SNI-imitation: ${SNI_COUNT} шт.
-          🕐 $(date -u '+%Y-%m-%d %H:%M UTC')
-
-          _Тапни на bridge чтобы скопировать_
-          _Мосты ⭐ SNI лучше обходят белые списки РФ_"
-          sleep 0.5
-
-          # Функция отправки chunk-а
-          send_chunk() {
-            local text="$1"
+          send_msg() {
             curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
               -d chat_id="${CHAT_ID}" \
               -d parse_mode="Markdown" \
-              --data-urlencode "text=${text}"
+              --data-urlencode "text=$1"
             sleep 0.5
           }
 
-          # SNI bridges — первыми
+          # Заголовок
+          send_msg "🧅 *WEBTUNNEL bridges* — ${COUNT} шт.
+          ⭐ С SNI-imitation: ${SNI_COUNT} шт.
+          🕐 $(date -u '+%Y-%m-%d %H:%M UTC')
+
+          _Нажми Copy на блоке — скопируются все мосты сразу_
+          _Блоки ⭐ SNI лучше обходят белые списки РФ_"
+
+          # ── SNI bridges ──────────────────────────────────────
           SNI_LINES=$(grep 'sni-imitation' webtunnel.txt || true)
           if [ -n "$SNI_LINES" ]; then
-            curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
-              -d chat_id="${CHAT_ID}" \
-              -d parse_mode="Markdown" \
-              -d text="⭐ *Bridges с SNI-imitation:*"
-            sleep 0.5
+            send_msg "⭐ *Bridges с SNI-imitation:*"
 
             i=0
             chunk=""
             while IFS= read -r line; do
               [[ -z "$line" ]] && continue
-              chunk="${chunk}\`${line}\`
-          ⭐ _SNI-imitation_
-
+              chunk="${chunk}${line}
           "
               i=$((i+1))
               if [ $i -eq 10 ]; then
-                send_chunk "$chunk"
+                send_msg "\`\`\`
+          ${chunk}\`\`\`"
                 chunk=""
                 i=0
               fi
             done <<< "$SNI_LINES"
-            [ -n "$chunk" ] && send_chunk "$chunk"
+
+            if [ -n "$chunk" ]; then
+              send_msg "\`\`\`
+          ${chunk}\`\`\`"
+            fi
           fi
 
-          # Остальные bridges
-          curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
-            -d chat_id="${CHAT_ID}" \
-            -d parse_mode="Markdown" \
-            -d text="🌐 *Остальные webtunnel bridges:*"
-          sleep 0.5
+          # ── Остальные bridges ────────────────────────────────
+          send_msg "🌐 *Остальные webtunnel bridges:*"
 
           i=0
           chunk=""
@@ -90,19 +79,20 @@ jobs:
             [[ "$line" =~ ^# ]] && continue
             [[ -z "$line" ]] && continue
             [[ "$line" == *"sni-imitation"* ]] && continue
-            chunk="${chunk}\`${line}\`
-
+            chunk="${chunk}${line}
           "
             i=$((i+1))
             if [ $i -eq 15 ]; then
-              send_chunk "$chunk"
+              send_msg "\`\`\`
+          ${chunk}\`\`\`"
               chunk=""
               i=0
             fi
           done < <(grep '^webtunnel ' webtunnel.txt)
 
-          [ -n "$chunk" ] && send_chunk "$chunk"
+          if [ -n "$chunk" ]; then
+            send_msg "\`\`\`
+          ${chunk}\`\`\`"
+          fi
 
-          curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
-            -d chat_id="${CHAT_ID}" \
-            -d text="✅ Готово! Отправлено: ${COUNT} bridges."
+          send_msg "✅ Готово! Отправлено: ${COUNT} bridges."
