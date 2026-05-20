@@ -7,24 +7,44 @@ on:
     - cron: '0 */3 * * *'
 
 jobs:
+
   build:
+
     runs-on: ubuntu-latest
 
     steps:
+
       - uses: actions/checkout@v4
 
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - run: pip install -r requirements.txt
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
 
-      - run: python main.py
+      - name: Run parser
+        run: |
+          python main.py
+
+      - name: Show generated files
+        run: |
+          ls -la
+          ls -la output || true
 
       - name: Commit bridges
         run: |
+
           git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add bridges/
-          git diff --cached --quiet || git commit -m "update bridges $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+
+          git config user.email \
+          "github-actions[bot]@users.noreply.github.com"
+
+          git add output/
+
+          git diff --cached --quiet || \
+          git commit -m \
+          "update bridges $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+
           git push
