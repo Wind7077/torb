@@ -1,20 +1,48 @@
+import re
+
+
+def normalize(line: str):
+
+    line = line.replace(
+        '\ufeff',
+        ''
+    )
+
+    line = line.replace(
+        '\u200b',
+        ''
+    )
+
+    line = line.replace(
+        '\t',
+        ' '
+    )
+
+    line = re.sub(
+        r'\s+',
+        ' ',
+        line
+    )
+
+    return line.strip()
+
+
 def validate_bridge(line: str):
 
-    line = line.strip().lower()
+    line = normalize(line)
 
-    if not line:
-        return None
+    lower = line.lower()
 
-    if line.startswith('obfs4'):
+    if lower.startswith('obfs4 '):
         return 'obfs4'
 
-    if line.startswith('webtunnel'):
+    if lower.startswith('webtunnel '):
         return 'webtunnel'
 
-    if line.startswith('vanilla'):
+    if lower.startswith('vanilla '):
         return 'vanilla'
 
-    if line.startswith('snowflake'):
+    if lower.startswith('snowflake '):
         return 'snowflake'
 
     return None
