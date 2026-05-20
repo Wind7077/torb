@@ -14,7 +14,7 @@ from modules.parser import (
 )
 
 
-OUTPUT_DIR = Path('output')
+OUTPUT_DIR = Path('bridges')
 
 SEM = asyncio.Semaphore(300)
 
@@ -193,8 +193,6 @@ async def main():
         f'[INFO] loaded {len(all_lines)} raw lines'
     )
 
-    bridges = []
-
     tasks = [
         process_bridge(line)
         for line in all_lines
@@ -246,7 +244,19 @@ async def main():
             snowflake.append(line)
 
     print(
+        f'[INFO] obfs4={len(obfs4)}'
+    )
+
+    print(
         f'[INFO] webtunnel={len(webtunnel)}'
+    )
+
+    print(
+        f'[INFO] vanilla={len(vanilla)}'
+    )
+
+    print(
+        f'[INFO] snowflake={len(snowflake)}'
     )
 
     await save_file(
