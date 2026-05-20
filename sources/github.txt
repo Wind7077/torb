@@ -1,0 +1,5 @@
+https://raw.githubusercontent.com/scriptzteam/Tor-Bridges-Collector/main/bridges-obfs4
+https://raw.githubusercontent.com/scriptzteam/Tor-Bridges-Collector/main/bridges-webtunnel
+https://raw.githubusercontent.com/scriptzteam/Tor-Bridges-Collector/main/bridges-vanilla
+https://raw.githubusercontent.com/Forceu/GDPI-Tor/main/bridges.txt
+https://github.com/igareck/vpn-configs-for-russia/blob/main/TOR-BRIDGES/TOR_BRIDGES_ALL.txt
