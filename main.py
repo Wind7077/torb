@@ -4,8 +4,14 @@ import time
 
 from pathlib import Path
 
-from modules.validator import validate_bridge
-from modules.parser import extract_host_port
+from modules.validator import (
+    validate_bridge,
+    normalize
+)
+
+from modules.parser import (
+    extract_host_port
+)
 
 
 OUTPUT_DIR = Path('output')
@@ -82,7 +88,7 @@ async def measure_latency(
 
 async def process_bridge(line):
 
-    line = line.strip()
+    line = normalize(line)
 
     if not line:
         return None
@@ -173,7 +179,7 @@ async def main():
 
         for line in page.splitlines():
 
-            line = line.strip()
+            line = normalize(line)
 
             if not line:
                 continue
@@ -187,28 +193,11 @@ async def main():
         f'[INFO] loaded {len(all_lines)} raw lines'
     )
 
-    valid_lines = []
-
-    for line in all_lines:
-
-        transport = validate_bridge(line)
-
-        if transport:
-
-            valid_lines.append(
-                (
-                    line,
-                    transport
-                )
-            )
-
-    print(
-        f'[INFO] validated {len(valid_lines)} bridges'
-    )
+    bridges = []
 
     tasks = [
         process_bridge(line)
-        for line, _ in valid_lines
+        for line in all_lines
     ]
 
     results = await asyncio.gather(*tasks)
@@ -255,6 +244,10 @@ async def main():
         elif transport == 'snowflake':
 
             snowflake.append(line)
+
+    print(
+        f'[INFO] webtunnel={len(webtunnel)}'
+    )
 
     await save_file(
         'mixed.txt',
