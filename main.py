@@ -3,6 +3,7 @@ import aiohttp
 import aiofiles
 import os
 import re
+import ssl
 
 from modules.parser import extract_host_port
 from modules.validator import validate_bridge
@@ -30,6 +31,12 @@ async def fetch_url(session: aiohttp.ClientSession, url: str) -> list[str]:
     return []
 
 
+async def check(line: str, btype: str, parsed: tuple) -> tuple | None:
+    host, port = parsed
+    ok = await tcp_check(host, port, use_tls=(btype == 'webtunnel'))
+    return (line, btype) if ok else None
+
+
 async def main():
     async with aiofiles.open(SOURCES_FILE, "r") as f:
         urls = [l.strip() for l in await f.readlines() if l.strip()]
@@ -44,17 +51,19 @@ async def main():
 
     print(f"\n[*] Всего строк: {len(all_lines)}")
 
-    # Считаем сколько строк каждого типа до проверки
+    # Валидация и парсинг
     type_counts = {t: 0 for t in BRIDGE_TYPES}
     type_counts["unknown"] = 0
     valid = []
+    seen = set()
 
     for line in all_lines:
         btype = validate_bridge(line)
         if btype:
             type_counts[btype] += 1
             parsed = extract_host_port(line)
-            if parsed:
+            if parsed and line not in seen:
+                seen.add(line)
                 valid.append((line, btype, parsed))
         else:
             type_counts["unknown"] += 1
@@ -64,7 +73,7 @@ async def main():
         print(f"  {t}: {c}")
     print(f"  с распознанным host:port: {len(valid)}")
 
-    # Показываем примеры "unknown" строк — это самое важное для диагностики
+    # Примеры нераспознанных строк
     unknown_examples = []
     for line in all_lines:
         if validate_bridge(line) is None and len(unknown_examples) < 10:
@@ -76,11 +85,6 @@ async def main():
 
     # TCP-проверка
     print(f"\n[*] TCP-проверка {len(valid)} мостов...")
-
-    async def check(line, btype, parsed):
-        host, port = parsed
-        ok = await tcp_check(host, port)
-        return (line, btype) if ok else None
 
     tasks = [check(l, bt, p) for l, bt, p in valid]
     checked = await asyncio.gather(*tasks)
