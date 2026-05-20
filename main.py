@@ -1,14 +1,16 @@
 import asyncio
 import aiohttp
+import time
+
 from pathlib import Path
 
 from modules.validator import validate_bridge
 from modules.parser import extract_host_port
-from modules.checker import tcp_check
-from modules.latency import measure_latency
 
 
 OUTPUT_DIR = Path('output')
+
+SEM = asyncio.Semaphore(300)
 
 
 async def fetch(session, url):
@@ -21,18 +23,61 @@ async def fetch(session, url):
         ) as response:
 
             if response.status != 200:
-                print(f'[BAD STATUS] {url} -> {response.status}')
+
+                print(
+                    f'[BAD STATUS] {url} -> {response.status}'
+                )
+
                 return ''
 
-            print(f'[OK] {url}')
+            print(
+                f'[OK] {url}'
+            )
 
             return await response.text()
 
     except Exception as e:
 
-        print(f'[FETCH ERROR] {url} -> {e}')
+        print(
+            f'[FETCH ERROR] {url} -> {e}'
+        )
 
         return ''
+
+
+async def measure_latency(
+    host,
+    port,
+    timeout=3
+):
+
+    try:
+
+        async with SEM:
+
+            start = time.perf_counter()
+
+            reader, writer = await asyncio.wait_for(
+                asyncio.open_connection(
+                    host,
+                    port
+                ),
+                timeout=timeout
+            )
+
+            latency = round(
+                (time.perf_counter() - start) * 1000
+            )
+
+            writer.close()
+
+            await writer.wait_closed()
+
+            return latency
+
+    except:
+
+        return 99999
 
 
 async def process_bridge(line):
@@ -54,12 +99,10 @@ async def process_bridge(line):
 
     host, port = hp
 
-    alive = await tcp_check(host, port)
-
-    if not alive:
-        return None
-
-    latency = await measure_latency(host, port)
+    latency = await measure_latency(
+        host,
+        port
+    )
 
     return {
         'line': line,
@@ -68,17 +111,26 @@ async def process_bridge(line):
     }
 
 
-async def save_file(name, lines):
+async def save_file(
+    filename,
+    lines
+):
 
-    path = OUTPUT_DIR / name
+    path = OUTPUT_DIR / filename
 
-    with open(path, 'w', encoding='utf-8') as f:
+    with open(
+        path,
+        'w',
+        encoding='utf-8'
+    ) as f:
 
         f.write(
             '\n'.join(lines)
         )
 
-    print(f'[SAVED] {path} ({len(lines)} lines)')
+    print(
+        f'[SAVED] {path} ({len(lines)} lines)'
+    )
 
 
 async def main():
@@ -99,7 +151,9 @@ async def main():
         if x.strip()
     ]
 
-    print(f'[INFO] loaded {len(github_sources)} sources')
+    print(
+        f'[INFO] loaded {len(github_sources)} sources'
+    )
 
     all_lines = set()
 
@@ -121,7 +175,9 @@ async def main():
             if line:
                 all_lines.add(line)
 
-    print(f'[INFO] loaded {len(all_lines)} raw lines')
+    print(
+        f'[INFO] loaded {len(all_lines)} raw lines'
+    )
 
     valid_lines = []
 
@@ -131,7 +187,9 @@ async def main():
 
             valid_lines.append(line)
 
-    print(f'[INFO] validated {len(valid_lines)} bridges')
+    print(
+        f'[INFO] validated {len(valid_lines)} bridges'
+    )
 
     tasks = [
         process_bridge(line)
@@ -145,7 +203,9 @@ async def main():
         if r
     ]
 
-    print(f'[INFO] alive {len(bridges)} bridges')
+    print(
+        f'[INFO] processed {len(bridges)} bridges'
+    )
 
     bridges.sort(
         key=lambda x: x['latency']
@@ -160,20 +220,25 @@ async def main():
     for bridge in bridges:
 
         line = bridge['line']
+
         transport = bridge['transport']
 
         mixed.append(line)
 
         if transport == 'obfs4':
+
             obfs4.append(line)
 
         elif transport == 'webtunnel':
+
             webtunnel.append(line)
 
         elif transport == 'vanilla':
+
             vanilla.append(line)
 
         elif transport == 'snowflake':
+
             snowflake.append(line)
 
     await save_file(
