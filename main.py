@@ -1,102 +1,113 @@
 import asyncio
 import aiohttp
 import aiofiles
+import os
+import re
 
 from modules.parser import extract_host_port
 from modules.validator import validate_bridge
 from modules.checker import tcp_check
-from modules.latency import measure_latency
 
 
-SOURCES_GITHUB = "sources/github.txt"
+SOURCES_FILE = "sources/github.txt"
 OUTPUT_DIR = "bridges"
-
 BRIDGE_TYPES = ["obfs4", "webtunnel", "vanilla", "snowflake"]
 
 
 async def fetch_url(session: aiohttp.ClientSession, url: str) -> list[str]:
     try:
         async with session.get(url, timeout=aiohttp.ClientTimeout(total=30)) as resp:
+            print(f"[HTTP {resp.status}] {url}")
             if resp.status == 200:
                 text = await resp.text()
-                return text.splitlines()
+                lines = [l for l in text.splitlines() if l.strip()]
+                print(f"  → {len(lines)} непустых строк")
+                return lines
+            else:
+                print(f"  → ПРОПУЩЕНО (не 200)")
     except Exception as e:
-        print(f"[!] Ошибка загрузки {url}: {e}")
+        print(f"  → ОШИБКА: {e}")
     return []
 
 
-async def process_bridges(lines: list[str]) -> dict[str, list[str]]:
-    result = {t: [] for t in BRIDGE_TYPES}
-    seen = set()
-
-    tasks = []
-    valid_lines = []
-
-    for line in lines:
-        line = line.strip()
-        if not line or line in seen:
-            continue
-        bridge_type = validate_bridge(line)
-        if bridge_type is None:
-            continue
-        parsed = extract_host_port(line)
-        if parsed is None:
-            continue
-        seen.add(line)
-        valid_lines.append((line, bridge_type, parsed))
-
-    async def check(line, bridge_type, parsed):
-        host, port = parsed
-        ok = await tcp_check(host, port)
-        if ok:
-            lat = await measure_latency(host, port)
-            return line, bridge_type, lat
-        return None
-
-    tasks = [check(l, bt, p) for l, bt, p in valid_lines]
-    results = await asyncio.gather(*tasks)
-
-    for r in results:
-        if r is not None:
-            line, bridge_type, lat = r
-            result[bridge_type].append((lat, line))
-
-    # Сортируем по латентности
-    for t in BRIDGE_TYPES:
-        result[t] = [line for _, line in sorted(result[t], key=lambda x: x[0])]
-
-    return result
-
-
-async def save_bridges(bridges: dict[str, list[str]]):
-    import os
-    os.makedirs(OUTPUT_DIR, exist_ok=True)
-    for bridge_type, lines in bridges.items():
-        if not lines:
-            print(f"[~] {bridge_type}: нет рабочих мостов")
-            continue
-        path = os.path.join(OUTPUT_DIR, f"{bridge_type}.txt")
-        async with aiofiles.open(path, "w", encoding="utf-8") as f:
-            await f.write("\n".join(lines) + "\n")
-        print(f"[+] {bridge_type}: {len(lines)} мостов → {path}")
-
-
 async def main():
-    # Загружаем список URL-источников
-    async with aiofiles.open(SOURCES_GITHUB, "r", encoding="utf-8") as f:
-        urls = [line.strip() for line in await f.readlines() if line.strip()]
+    async with aiofiles.open(SOURCES_FILE, "r") as f:
+        urls = [l.strip() for l in await f.readlines() if l.strip()]
+
+    print(f"[*] Источников: {len(urls)}")
 
     all_lines = []
     async with aiohttp.ClientSession() as session:
-        fetch_tasks = [fetch_url(session, url) for url in urls]
-        fetched = await asyncio.gather(*fetch_tasks)
-        for lines in fetched:
+        results = await asyncio.gather(*[fetch_url(session, u) for u in urls])
+        for lines in results:
             all_lines.extend(lines)
 
-    print(f"[*] Всего строк из источников: {len(all_lines)}")
+    print(f"\n[*] Всего строк: {len(all_lines)}")
 
-    bridges = await process_bridges(all_lines)
-    await save_bridges(bridges)
+    # Считаем сколько строк каждого типа до проверки
+    type_counts = {t: 0 for t in BRIDGE_TYPES}
+    type_counts["unknown"] = 0
+    valid = []
+
+    for line in all_lines:
+        btype = validate_bridge(line)
+        if btype:
+            type_counts[btype] += 1
+            parsed = extract_host_port(line)
+            if parsed:
+                valid.append((line, btype, parsed))
+        else:
+            type_counts["unknown"] += 1
+
+    print("\n[*] После валидации:")
+    for t, c in type_counts.items():
+        print(f"  {t}: {c}")
+    print(f"  с распознанным host:port: {len(valid)}")
+
+    # Показываем примеры "unknown" строк — это самое важное для диагностики
+    unknown_examples = []
+    for line in all_lines:
+        if validate_bridge(line) is None and len(unknown_examples) < 10:
+            unknown_examples.append(line)
+    if unknown_examples:
+        print("\n[!] Примеры непризнанных строк:")
+        for l in unknown_examples:
+            print(f"  {repr(l[:120])}")
+
+    # TCP-проверка
+    print(f"\n[*] TCP-проверка {len(valid)} мостов...")
+
+    async def check(line, btype, parsed):
+        host, port = parsed
+        ok = await tcp_check(host, port)
+        return (line, btype) if ok else None
+
+    tasks = [check(l, bt, p) for l, bt, p in valid]
+    checked = await asyncio.gather(*tasks)
+    alive = [r for r in checked if r]
+
+    alive_counts = {t: 0 for t in BRIDGE_TYPES}
+    for _, btype in alive:
+        alive_counts[btype] += 1
+
+    print("[*] Живых мостов после TCP:")
+    for t, c in alive_counts.items():
+        print(f"  {t}: {c}")
+
+    # Запись файлов
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
+    buckets = {t: [] for t in BRIDGE_TYPES}
+    for line, btype in alive:
+        buckets[btype].append(line)
+
+    for btype, lines in buckets.items():
+        if not lines:
+            print(f"[~] {btype}: нет живых — файл не создан")
+            continue
+        path = os.path.join(OUTPUT_DIR, f"{btype}.txt")
+        async with aiofiles.open(path, "w") as f:
+            await f.write("\n".join(lines) + "\n")
+        print(f"[+] {path}: {len(lines)} мостов записано")
 
 
 if __name__ == "__main__":
