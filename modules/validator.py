@@ -8,7 +8,7 @@ def validate_bridge(line: str) -> str | None:
     if not line or line.startswith('#'):
         return None
 
-    # Убираем опциональный префикс "Bridge " (torrc-формат)
+    # Убираем опциональный префикс "Bridge "
     if line.lower().startswith('bridge '):
         line = line[7:].strip()
 
@@ -24,13 +24,12 @@ def validate_bridge(line: str) -> str | None:
     if line.startswith('snowflake '):
         return 'snowflake'
 
-    # Vanilla-мосты без префикса: просто IP:PORT или [IPv6]:PORT
-    bare_ipv4 = re.match(r'^\d{1,3}(?:\.\d{1,3}){3}:\d+$', line)
-    if bare_ipv4:
+    # Vanilla без префикса: IP:PORT или IP:PORT FINGERPRINT
+    if re.match(r'^\d{1,3}(?:\.\d{1,3}){3}:\d+', line):
         return 'vanilla'
 
-    bare_ipv6 = re.match(r'^\[[^\]]+\]:\d+$', line)
-    if bare_ipv6:
+    # IPv6 без префикса
+    if re.match(r'^\[[^\]]+\]:\d+', line):
         return 'vanilla'
 
     return None
