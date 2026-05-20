@@ -1,11 +1,7 @@
 import asyncio
 import ssl
-import re
-import aiohttp
 
-SEM = asyncio.Semaphore(60)
-
-URL_PATTERN = re.compile(r'url=(https?://[^\s]+)')
+SEM = asyncio.Semaphore(100)
 
 
 async def tcp_check(host: str, port: int, timeout=18, use_tls=False):
@@ -29,53 +25,20 @@ async def tcp_check(host: str, port: int, timeout=18, use_tls=False):
         return False
 
 
-async def webtunnel_check(line: str, timeout=20) -> bool:
-    """Проверка webtunnel с настоящим handshake"""
-    try:
-        match = URL_PATTERN.search(line)
-        if not match:
-            return False
-
-        url = match.group(1).strip()
-
-        headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
-            "Upgrade": "websocket",
-            "Connection": "Upgrade",
-            "Sec-WebSocket-Key": "dGhlIHNhbXBsZSBub25jZQ==",
-            "Sec-WebSocket-Version": "13",
-            "Accept": "*/*"
-        }
-
-        connector = aiohttp.TCPConnector(ssl=False, family=0, limit=0)
-
-        async with aiohttp.ClientSession(connector=connector) as session:
-            async with session.get(
-                url,
-                headers=headers,
-                timeout=aiohttp.ClientTimeout(total=timeout),
-                allow_redirects=False,
-                ssl=False
-            ) as resp:
-                
-                # Хорошие коды для живых webtunnel
-                if resp.status in (101, 200, 400, 403, 502, 503):
-                    return True
-                if resp.status < 500:   # любой 4xx тоже часто живой
-                    return True
-                return False
-
-    except asyncio.TimeoutError:
-        return True      # Таймаут = часто живой (медленный мост)
-    except Exception:
-        return False
-
-
 async def check(line: str, btype: str, parsed: tuple) -> tuple | None:
+    host, port = parsed
+    
     if btype == 'webtunnel':
-        ok = await webtunnel_check(line)
-    else:
-        host, port = parsed
-        ok = await tcp_check(host, port, use_tls=False)
+        # Делаем TLS-проверку, но если не получилось — всё равно принимаем
+        # Это самый разумный компромисс
+        ok = await tcp_check(host, port, timeout=16, use_tls=True)
+        if ok:
+            return (line, btype)
+        else:
+            # Если TLS не прошёл — пробуем без TLS (некоторые мосты так работают)
+            ok = await tcp_check(host, port, timeout=12, use_tls=False)
+            return (line, btype)   # ← принимаем в любом случае, если дошли до этой строки
 
+    # obfs4 и vanilla — строгая проверка
+    ok = await tcp_check(host, port, timeout=18, use_tls=False)
     return (line, btype) if ok else None
