@@ -1,7 +1,7 @@
 import re
 
 
-def validate_bridge(line: str):
+def validate_bridge(line: str) -> str | None:
 
     line = line.strip()
 
@@ -19,5 +19,10 @@ def validate_bridge(line: str):
 
     if line.startswith('snowflake '):
         return 'snowflake'
+
+    # Некоторые источники дают vanilla-мосты просто как IP:PORT без префикса
+    bare = re.match(r'^(\d{1,3}\.){3}\d{1,3}:\d+$', line)
+    if bare:
+        return 'vanilla'
 
     return None
