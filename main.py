@@ -6,7 +6,6 @@ from pathlib import Path
 
 from modules.validator import validate_bridge
 from modules.parser import extract_host_port
-from modules.webtunnel_checker import check_webtunnel
 
 
 OUTPUT_DIR = Path('output')
@@ -20,7 +19,7 @@ async def fetch(session, url):
 
         async with session.get(
             url,
-            timeout=aiohttp.ClientTimeout(total=20)
+            timeout=aiohttp.ClientTimeout(total=30)
         ) as response:
 
             if response.status != 200:
@@ -95,19 +94,7 @@ async def process_bridge(line):
 
     latency = 99999
 
-    if transport == 'webtunnel':
-
-        ok = await check_webtunnel(line)
-
-        if not ok:
-
-            print(
-                f'[WEBTUNNEL FAIL] {line[:80]}'
-            )
-
-            return None
-
-    else:
+    if transport != 'webtunnel':
 
         hp = extract_host_port(line)
 
@@ -204,9 +191,16 @@ async def main():
 
     for line in all_lines:
 
-        if validate_bridge(line):
+        transport = validate_bridge(line)
 
-            valid_lines.append(line)
+        if transport:
+
+            valid_lines.append(
+                (
+                    line,
+                    transport
+                )
+            )
 
     print(
         f'[INFO] validated {len(valid_lines)} bridges'
@@ -214,7 +208,7 @@ async def main():
 
     tasks = [
         process_bridge(line)
-        for line in valid_lines
+        for line, _ in valid_lines
     ]
 
     results = await asyncio.gather(*tasks)
