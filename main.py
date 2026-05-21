@@ -36,11 +36,11 @@ async def fetch(session, url: str) -> str:
 # ── Scoring helpers ───────────────────────────────────────────────────────────
 
 def port_score(port: int) -> int:
-    if port == 443:   return 30
-    if port == 8443:  return 20
-    if port == 80:    return 15
-    if port == 8080:  return 10
-    if port > 50000:  return -20
+    if port == 443:  return 30
+    if port == 8443: return 20
+    if port == 80:   return 15
+    if port == 8080: return 10
+    if port > 50000: return -20
     return 0
 
 
@@ -68,7 +68,7 @@ async def process_bridge(raw: str, history: dict) -> dict | None:
     if not line or line.startswith('#'):
         return None
 
-    # Убираем Bridge-префикс для валидации
+    # убираем Bridge-префикс для валидации
     clean = line[7:].strip() if line.lower().startswith('bridge ') else line
     transport = validate_bridge(clean)
     if not transport:
@@ -99,7 +99,8 @@ async def process_bridge(raw: str, history: dict) -> dict | None:
     if transport == 'webtunnel':
         score += version_score(clean)
 
-    score += history_score(history, fp)
+    # передаём transport чтобы порог медлительности был правильным
+    score += history_score(history, fp, transport)
 
     country = 'XX'
     if hp:
@@ -122,37 +123,37 @@ async def process_bridge(raw: str, history: dict) -> dict | None:
 # ── Dedupe + cluster filter ───────────────────────────────────────────────────
 
 def dedupe_and_filter(bridges: list) -> list:
-    seen_fp = set()           # дедупликация по полному fingerprint
-    seen_ipport = set()       # дедупликация по IP:PORT
-    cluster24 = defaultdict(int)   # /24 лимит
-    country_count = defaultdict(int)  # страновой лимит
+    seen_fp = set()
+    seen_ipport = set()
+    cluster24 = defaultdict(int)
+    country_count = defaultdict(int)
 
     result = []
     for b in bridges:
         fp = b['fp']
         hp = b['hp']
 
-        # Дедупликация по fingerprint
+        # дедупликация по полному fingerprint
         if fp and fp in seen_fp:
             continue
         if fp:
             seen_fp.add(fp)
 
-        # Дедупликация по IP:PORT
+        # дедупликация по IP:PORT
         if hp:
             key = f'{hp[0]}:{hp[1]}'
             if key in seen_ipport:
                 continue
             seen_ipport.add(key)
 
-        # Кластер /24
+        # кластер /24 — максимум 2 из одной подсети
         if hp and re.match(r'^\d+\.\d+\.\d+\.\d+$', hp[0]):
             net = slash24(hp[0])
             if cluster24[net] >= 2:
                 continue
             cluster24[net] += 1
 
-        # Страновой лимит (не более 3 из одной страны в топ)
+        # страновой лимит — максимум 3 из одной страны
         c = b['country']
         if c != 'XX' and not country_limit_ok(country_count, c, limit=3):
             continue
@@ -163,7 +164,7 @@ def dedupe_and_filter(bridges: list) -> list:
     return result
 
 
-# ── Build mixed top-N with type rotation ─────────────────────────────────────
+# ── Build mixed top-N with type rotation ──────────────────────────────────────
 
 def build_mixed(by_type: dict, n: int) -> list:
     buckets = {t: list(v) for t, v in by_type.items()}
@@ -207,17 +208,17 @@ async def main():
     alive = [r for r in results if r]
     print(f'[INFO] живых мостов (2x retry): {len(alive)}')
 
-    # Обновляем историю для живых мостов
+    # обновляем историю для живых
     for b in alive:
         if b['fp']:
             history = update_entry(history, b['fp'], b['latency'])
     save_history(history)
     print(f'[INFO] история сохранена: {len(history)} записей')
 
-    # Сортировка: score desc, latency asc
+    # сортировка: score desc, latency asc
     alive.sort(key=lambda x: (-x['score'], x['latency']))
 
-    # Дедупликация и кластеризация
+    # дедупликация и кластеризация
     alive = dedupe_and_filter(alive)
     print(f'[INFO] после фильтров: {len(alive)}')
 
