@@ -1,45 +1,59 @@
+import asyncio
 import aiohttp
 import ssl
 import re
+import time
+
+SEM_WEBTUNNEL = asyncio.Semaphore(50)
+
+URL_RE = re.compile(r'url=(https://[^ ]+)')
+VER_RE = re.compile(r'ver=(\d+)\.(\d+)\.(\d+)')
 
 
-URL_RE = re.compile(
-    r'url=(https://[^ ]+)'
-)
+def version_score(line: str) -> int:
+    m = VER_RE.search(line)
+    if not m:
+        return 0
+    patch = int(m.group(3))
+    return 15 if patch >= 3 else -10
 
 
-async def check_webtunnel(
-    line,
-    timeout=10
-):
-
+async def _head_once(url: str, timeout: int = 10) -> int | None:
     try:
-
-        m = URL_RE.search(line)
-
-        if not m:
-            return False
-
-        url = m.group(1)
-
-        ssl_context = ssl.create_default_context()
-
-        connector = aiohttp.TCPConnector(
-            ssl=ssl_context
-        )
-
-        async with aiohttp.ClientSession(
-            connector=connector
-        ) as session:
-
-            async with session.get(
-                url,
-                timeout=timeout,
-                allow_redirects=True
-            ) as response:
-
-                return response.status < 500
-
+        async with SEM_WEBTUNNEL:
+            ctx = ssl.create_default_context()
+            ctx.check_hostname = False
+            ctx.verify_mode = ssl.CERT_NONE
+            conn = aiohttp.TCPConnector(ssl=ctx)
+            start = time.perf_counter()
+            async with aiohttp.ClientSession(connector=conn) as s:
+                async with s.head(
+                    url,
+                    timeout=aiohttp.ClientTimeout(total=timeout),
+                    allow_redirects=True
+                ) as resp:
+                    if resp.status >= 500:
+                        return None
+                    return round((time.perf_counter() - start) * 1000)
     except:
+        return None
 
-        return False
+
+async def reliable_webtunnel_check(
+    line: str,
+    retries: int = 2,
+    delay: float = 3.0
+) -> int | None:
+    """HEAD x retries, все должны пройти."""
+    m = URL_RE.search(line)
+    if not m:
+        return None
+    url = m.group(1)
+    results = []
+    for _ in range(retries):
+        ms = await _head_once(url)
+        if ms is None:
+            return None
+        results.append(ms)
+        await asyncio.sleep(delay)
+    return round(sum(results) / len(results))
