@@ -15,6 +15,8 @@ OUTPUT_DIR = Path('bridges')
 TOP_N = 15
 FP_RE = re.compile(r'\b([0-9A-F]{40})\b', re.I)
 
+TOP100_URL = 'https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/TOR-BRIDGES/TOR_BRIDGES_TOP100.txt'
+
 
 # ── Fetch ─────────────────────────────────────────────────────────────────────
 
@@ -63,12 +65,11 @@ def extract_fp(line: str) -> str:
 
 # ── Process one bridge ────────────────────────────────────────────────────────
 
-async def process_bridge(raw: str, history: dict) -> dict | None:
+async def process_bridge(raw: str, history: dict, top100_fps: set) -> dict | None:
     line = normalize(raw)
     if not line or line.startswith('#'):
         return None
 
-    # убираем Bridge-префикс для валидации
     clean = line[7:].strip() if line.lower().startswith('bridge ') else line
     transport = validate_bridge(clean)
     if not transport:
@@ -87,7 +88,7 @@ async def process_bridge(raw: str, history: dict) -> dict | None:
         return None
 
     if ms is None:
-        return None  # мёртвый
+        return None
 
     # ── Score ──
     score = latency_score(ms)
@@ -99,8 +100,11 @@ async def process_bridge(raw: str, history: dict) -> dict | None:
     if transport == 'webtunnel':
         score += version_score(clean)
 
-    # передаём transport чтобы порог медлительности был правильным
     score += history_score(history, fp, transport)
+
+    # бонус за проверку из РФ (igareck TOP100)
+    if fp and fp in top100_fps:
+        score += 25
 
     country = 'XX'
     if hp:
@@ -121,6 +125,9 @@ async def process_bridge(raw: str, history: dict) -> dict | None:
 
 
 # ── Dedupe + cluster filter ───────────────────────────────────────────────────
+
+TRUSTED_NETS = {'185.177.207'}
+
 
 def dedupe_and_filter(bridges: list) -> list:
     seen_fp = set()
@@ -146,10 +153,11 @@ def dedupe_and_filter(bridges: list) -> list:
                 continue
             seen_ipport.add(key)
 
-        # кластер /24 — максимум 2 из одной подсети
+        # кластер /24 — для надёжных ферм лимит мягче
         if hp and re.match(r'^\d+\.\d+\.\d+\.\d+$', hp[0]):
             net = slash24(hp[0])
-            if cluster24[net] >= 2:
+            limit = 4 if net in TRUSTED_NETS else 2
+            if cluster24[net] >= limit:
                 continue
             cluster24[net] += 1
 
@@ -168,7 +176,7 @@ def dedupe_and_filter(bridges: list) -> list:
 
 def build_mixed(by_type: dict, n: int) -> list:
     buckets = {t: list(v) for t, v in by_type.items()}
-    order = [t for t in ['obfs4', 'obfs4', 'webtunnel', 'vanilla']
+    order = [t for t in ['obfs4', 'webtunnel', 'vanilla', 'snowflake']
              if t in buckets]
     mixed = []
     i = 0
@@ -191,20 +199,37 @@ async def main():
     urls = [u.strip() for u in
             open('sources/github.txt', encoding='utf-8').readlines()
             if u.strip()]
+
+    # убеждаемся что TOP100 есть в списке источников
+    if TOP100_URL not in urls:
+        urls.append(TOP100_URL)
+
     print(f'[INFO] источников: {len(urls)}')
 
     async with aiohttp.ClientSession() as session:
         pages = await asyncio.gather(*[fetch(session, u) for u in urls])
 
+    # собираем строки и отдельно fingerprints из TOP100
     raw = set()
-    for page in pages:
+    top100_fps = set()
+
+    for url, page in zip(urls, pages):
         for line in page.splitlines():
             line = normalize(line)
-            if line and not line.startswith('#'):
-                raw.add(line)
-    print(f'[INFO] уникальных строк: {len(raw)}')
+            if not line or line.startswith('#'):
+                continue
+            raw.add(line)
+            if url == TOP100_URL:
+                fp = extract_fp(line)
+                if fp:
+                    top100_fps.add(fp)
 
-    results = await asyncio.gather(*[process_bridge(l, history) for l in raw])
+    print(f'[INFO] уникальных строк: {len(raw)}')
+    print(f'[INFO] fingerprints из TOP100: {len(top100_fps)}')
+
+    results = await asyncio.gather(*[
+        process_bridge(l, history, top100_fps) for l in raw
+    ])
     alive = [r for r in results if r]
     print(f'[INFO] живых мостов (2x retry): {len(alive)}')
 
