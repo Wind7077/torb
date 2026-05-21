@@ -1,4 +1,4 @@
-telethon
 aiohttp
 aiofiles
 aiodns
+geoip2
