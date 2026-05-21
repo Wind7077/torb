@@ -168,7 +168,7 @@ def dedupe_and_filter(bridges: list) -> list:
 
 def build_mixed(by_type: dict, n: int) -> list:
     buckets = {t: list(v) for t, v in by_type.items()}
-    order = [t for t in ['obfs4', 'webtunnel', 'vanilla', 'snowflake']
+    order = [t for t in ['obfs4', 'obfs4', 'webtunnel', 'vanilla']
              if t in buckets]
     mixed = []
     i = 0
