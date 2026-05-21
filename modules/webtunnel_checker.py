@@ -1,37 +1,11 @@
 import asyncio
-import aiohttp
-import ssl
+import tempfile
+import os
 import re
-import time
-
-SEM_WEBTUNNEL = asyncio.Semaphore(50)
 
 URL_RE = re.compile(r'url=([^\s]+)')
-VER_RE = re.compile(r'ver=(\d+)\.(\d+)\.(\d+)')
 FP_RE = re.compile(r'\b([A-F0-9]{40})\b', re.I)
-
-
-def version_score(line: str) -> int:
-
-    m = VER_RE.search(line)
-
-    if not m:
-        return -10
-
-    major = int(m.group(1))
-    minor = int(m.group(2))
-    patch = int(m.group(3))
-
-    if (major, minor, patch) < (0, 0, 1):
-        return -50
-
-    if patch >= 4:
-        return 20
-
-    if patch >= 3:
-        return 10
-
-    return 0
+VER_RE = re.compile(r'ver=(\d+)\.(\d+)\.(\d+)')
 
 
 def validate_webtunnel_line(line: str) -> bool:
@@ -47,87 +21,119 @@ def validate_webtunnel_line(line: str) -> bool:
     if not m:
         return False
 
-    version = tuple(map(int, m.groups()))
-
-    if version < (0, 0, 1):
-        return False
-
     return True
 
 
-async def _probe_webtunnel(
-    url: str,
-    timeout: int = 15
-) -> int | None:
+async def tor_bootstrap_webtunnel(
+    bridge_line: str,
+    timeout: int = 60
+) -> bool:
+
+    temp_dir = tempfile.mkdtemp(prefix='tor_wt_')
+
+    torrc = f'''
+UseBridges 1
+ClientTransportPlugin webtunnel exec /usr/bin/webtunnel-client
+Bridge {bridge_line}
+SocksPort auto
+DataDirectory {temp_dir}
+Log notice stdout
+'''
+
+    torrc_path = os.path.join(temp_dir, 'torrc')
+
+    with open(torrc_path, 'w', encoding='utf-8') as f:
+        f.write(torrc)
 
     try:
 
-        async with SEM_WEBTUNNEL:
+        proc = await asyncio.create_subprocess_exec(
+            'tor',
+            '-f',
+            torrc_path,
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.STDOUT
+        )
 
-            ctx = ssl.create_default_context()
+        try:
 
-            headers = {
-                'User-Agent': 'Mozilla/5.0',
-                'Upgrade': 'websocket',
-                'Connection': 'Upgrade',
-            }
+            while True:
 
-            connector = aiohttp.TCPConnector(
-                ssl=ctx,
-                force_close=True,
-            )
+                line = await asyncio.wait_for(
+                    proc.stdout.readline(),
+                    timeout=timeout
+                )
 
-            start = time.perf_counter()
+                if not line:
+                    break
 
-            async with aiohttp.ClientSession(
-                connector=connector,
-                headers=headers
-            ) as s:
+                text = line.decode(errors='ignore')
 
-                async with s.get(
-                    url,
-                    timeout=aiohttp.ClientTimeout(total=timeout),
-                    allow_redirects=True
-                ) as resp:
+                # bridge реально заработал
+                if 'Bootstrapped 100%' in text:
+                    proc.kill()
+                    return True
 
-                    if resp.status >= 400:
-                        return None
+                # bridge мертвый
+                bad = [
+                    'proxy client failed',
+                    'general SOCKS server failure',
+                    'connection refused',
+                    'handshake failed',
+                    'bridge unreachable',
+                    'invalid response',
+                    'timeout',
+                    'TLS error',
+                    'websocket',
+                    'failed'
+                ]
 
-                    return round(
-                        (time.perf_counter() - start) * 1000
-                    )
+                lower = text.lower()
+
+                if any(x in lower for x in bad):
+                    proc.kill()
+                    return False
+
+        except asyncio.TimeoutError:
+            proc.kill()
+            return False
 
     except:
-        return None
+        return False
+
+    finally:
+
+        try:
+            for root, dirs, files in os.walk(
+                temp_dir,
+                topdown=False
+            ):
+                for name in files:
+                    os.remove(os.path.join(root, name))
+                for name in dirs:
+                    os.rmdir(os.path.join(root, name))
+
+            os.rmdir(temp_dir)
+
+        except:
+            pass
+
+    return False
 
 
 async def reliable_webtunnel_check(
     line: str,
-    retries: int = 2,
-    delay: float = 2.0
+    retries: int = 1
 ) -> int | None:
 
     if not validate_webtunnel_line(line):
         return None
 
-    m = URL_RE.search(line)
-
-    if not m:
-        return None
-
-    url = m.group(1)
-
-    results = []
-
     for _ in range(retries):
 
-        ms = await _probe_webtunnel(url)
+        ok = await tor_bootstrap_webtunnel(line)
 
-        if ms is None:
-            return None
+        if ok:
+            return 1
 
-        results.append(ms)
-
-        await asyncio.sleep(delay)
-
-    return round(sum(results) / len(results))
+    return None
