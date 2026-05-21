@@ -3,6 +3,7 @@ import aiohttp
 import re
 from collections import defaultdict
 from pathlib import Path
+from modules.webtunnel_checker import get_version
 
 from modules.validator import validate_bridge, normalize
 from modules.parser import extract_host_port
@@ -130,7 +131,7 @@ TRUSTED_NETS = {'185.177.207'}
 
 
 def dedupe_and_filter(bridges: list) -> list:
-    seen_fp = set()
+    seen_fp: dict = {}      # fp -> индекс в result (для замены на лучшую версию)
     seen_ipport = set()
     cluster24 = defaultdict(int)
     country_count = defaultdict(int)
@@ -140,11 +141,17 @@ def dedupe_and_filter(bridges: list) -> list:
         fp = b['fp']
         hp = b['hp']
 
-        # дедупликация по полному fingerprint
+        # Для webtunnel — если fingerprint уже видели, оставляем версию с большим patch
         if fp and fp in seen_fp:
+            if b['transport'] == 'webtunnel':
+                existing_idx = seen_fp[fp]
+                existing = result[existing_idx]
+                if get_version(b['line']) > get_version(existing['line']):
+                    result[existing_idx] = b  # заменяем на более новую версию
             continue
+
         if fp:
-            seen_fp.add(fp)
+            seen_fp[fp] = len(result)
 
         # дедупликация по IP:PORT
         if hp:
@@ -153,7 +160,7 @@ def dedupe_and_filter(bridges: list) -> list:
                 continue
             seen_ipport.add(key)
 
-        # кластер /24 — для надёжных ферм лимит мягче
+        # кластер /24
         if hp and re.match(r'^\d+\.\d+\.\d+\.\d+$', hp[0]):
             net = slash24(hp[0])
             limit = 4 if net in TRUSTED_NETS else 2
@@ -161,7 +168,7 @@ def dedupe_and_filter(bridges: list) -> list:
                 continue
             cluster24[net] += 1
 
-        # страновой лимит — максимум 3 из одной страны
+        # страновой лимит
         c = b['country']
         if c != 'XX' and not country_limit_ok(country_count, c, limit=3):
             continue
@@ -170,7 +177,6 @@ def dedupe_and_filter(bridges: list) -> list:
         result.append(b)
 
     return result
-
 
 # ── Build mixed top-N with type rotation ──────────────────────────────────────
 
