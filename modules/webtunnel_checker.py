@@ -1,125 +1,59 @@
 import asyncio
-import tempfile
-import os
+import aiohttp
+import ssl
 import re
-import shutil
+import time
 
-URL_RE = re.compile(r'url=([^\s]+)')
-FP_RE = re.compile(r'\b([A-F0-9]{40})\b', re.I)
+SEM_WEBTUNNEL = asyncio.Semaphore(50)
+
+URL_RE = re.compile(r'url=(https://[^ ]+)')
 VER_RE = re.compile(r'ver=(\d+)\.(\d+)\.(\d+)')
 
 
-def validate_webtunnel_line(line: str) -> bool:
-
-    if not URL_RE.search(line):
-        return False
-
-    if not FP_RE.search(line):
-        return False
-
-    if not VER_RE.search(line):
-        return False
-
-    return True
+def version_score(line: str) -> int:
+    m = VER_RE.search(line)
+    if not m:
+        return 0
+    patch = int(m.group(3))
+    return 15 if patch >= 3 else -10
 
 
-async def tor_bootstrap_webtunnel(
-    bridge_line: str,
-    timeout: int = 90
-) -> bool:
-
-    temp_dir = tempfile.mkdtemp(prefix='tor_wt_')
-
-    torrc = f'''
-UseBridges 1
-ClientTransportPlugin webtunnel exec /usr/bin/lyrebird
-Bridge {bridge_line}
-SocksPort auto
-DataDirectory {temp_dir}
-Log notice stdout
-'''
-
-    torrc_path = os.path.join(temp_dir, 'torrc')
-
-    with open(torrc_path, 'w', encoding='utf-8') as f:
-        f.write(torrc)
-
+async def _head_once(url: str, timeout: int = 10) -> int | None:
     try:
-
-        proc = await asyncio.create_subprocess_exec(
-            'tor',
-            '-f',
-            torrc_path,
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.STDOUT
-        )
-
-        try:
-
-            while True:
-
-                line = await asyncio.wait_for(
-                    proc.stdout.readline(),
-                    timeout=timeout
-                )
-
-                if not line:
-                    break
-
-                text = line.decode(errors='ignore')
-
-                if 'Bootstrapped 100%' in text:
-                    proc.kill()
-                    return True
-
-                lower = text.lower()
-
-                bad = [
-                    'failed',
-                    'timeout',
-                    'connection refused',
-                    'bridge unreachable',
-                    'general socks server failure',
-                    'proxy client failed',
-                    'handshake',
-                    'websocket',
-                    'tls error',
-                ]
-
-                if any(x in lower for x in bad):
-                    proc.kill()
-                    return False
-
-        except asyncio.TimeoutError:
-            proc.kill()
-            return False
-
+        async with SEM_WEBTUNNEL:
+            ctx = ssl.create_default_context()
+            ctx.check_hostname = False
+            ctx.verify_mode = ssl.CERT_NONE
+            conn = aiohttp.TCPConnector(ssl=ctx)
+            start = time.perf_counter()
+            async with aiohttp.ClientSession(connector=conn) as s:
+                async with s.head(
+                    url,
+                    timeout=aiohttp.ClientTimeout(total=timeout),
+                    allow_redirects=True
+                ) as resp:
+                    if resp.status >= 500:
+                        return None
+                    return round((time.perf_counter() - start) * 1000)
     except:
-        return False
-
-    finally:
-
-        shutil.rmtree(
-            temp_dir,
-            ignore_errors=True
-        )
-
-    return False
+        return None
 
 
 async def reliable_webtunnel_check(
     line: str,
-    retries: int = 1
+    retries: int = 2,
+    delay: float = 3.0
 ) -> int | None:
-
-    if not validate_webtunnel_line(line):
+    """HEAD x retries, все должны пройти."""
+    m = URL_RE.search(line)
+    if not m:
         return None
-
+    url = m.group(1)
+    results = []
     for _ in range(retries):
-
-        ok = await tor_bootstrap_webtunnel(line)
-
-        if ok:
-            return 1
-
-    return None
+        ms = await _head_once(url)
+        if ms is None:
+            return None
+        results.append(ms)
+        await asyncio.sleep(delay)
+    return round(sum(results) / len(results))
