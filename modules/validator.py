@@ -6,10 +6,13 @@ VER_RE = re.compile(r'ver=(\d+)\.(\d+)\.(\d+)')
 
 
 def normalize(line: str) -> str:
+
     line = line.replace('\ufeff', '')
     line = line.replace('\u200b', '')
     line = line.replace('\t', ' ')
+
     line = re.sub(r'\s+', ' ', line)
+
     return line.strip()
 
 
@@ -28,8 +31,7 @@ def valid_webtunnel(line: str) -> bool:
 
     version = tuple(map(int, m.groups()))
 
-    # выкидываем старый webtunnel
-    if version <= (0, 0, 1):
+    if version < (0, 0, 1):
         return False
 
     return True
