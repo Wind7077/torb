@@ -25,26 +25,13 @@ jobs:
 
           sudo apt install -y \
             tor \
-            golang-go \
-            wget \
-            unzip
+            webtunnel \
+            python3-pip
 
-      - name: Download webtunnel
+      - name: Check webtunnel install
         run: |
-          wget -O webtunnel.zip \
-            https://codeload.github.com/tn3w/webtunnel/zip/refs/heads/master
-
-          unzip webtunnel.zip
-
-      - name: Build webtunnel-client
-        run: |
-          cd webtunnel-master/client
-
-          go build -o webtunnel-client
-
-          sudo mv webtunnel-client /usr/bin/webtunnel-client
-
-          sudo chmod +x /usr/bin/webtunnel-client
+          which webtunnel-client || true
+          which webtunnel || true
 
       - name: Install Python deps
         run: |
