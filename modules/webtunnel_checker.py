@@ -12,24 +12,24 @@ FP_RE = re.compile(r'\b([A-F0-9]{40})\b', re.I)
 
 
 def version_score(line: str) -> int:
+
     m = VER_RE.search(line)
 
     if not m:
-        return -20
+        return -10
 
     major = int(m.group(1))
     minor = int(m.group(2))
     patch = int(m.group(3))
 
-    # отбрасываем старые webtunnel
-    if (major, minor, patch) <= (0, 0, 1):
+    if (major, minor, patch) < (0, 0, 1):
         return -50
 
     if patch >= 4:
-        return 25
+        return 20
 
     if patch >= 3:
-        return 15
+        return 10
 
     return 0
 
@@ -49,14 +49,16 @@ def validate_webtunnel_line(line: str) -> bool:
 
     version = tuple(map(int, m.groups()))
 
-    # убираем мусорный 0.0.1
-    if version <= (0, 0, 1):
+    if version < (0, 0, 1):
         return False
 
     return True
 
 
-async def _probe_webtunnel(url: str, timeout: int = 15) -> int | None:
+async def _probe_webtunnel(
+    url: str,
+    timeout: int = 15
+) -> int | None:
 
     try:
 
@@ -88,12 +90,7 @@ async def _probe_webtunnel(url: str, timeout: int = 15) -> int | None:
                     allow_redirects=True
                 ) as resp:
 
-                    # endpoint мертв
                     if resp.status >= 400:
-                        return None
-
-                    # webtunnel без h2 часто мусор
-                    if resp.version.major < 2:
                         return None
 
                     return round(
