@@ -2,6 +2,7 @@ import asyncio
 import tempfile
 import os
 import re
+import shutil
 
 URL_RE = re.compile(r'url=([^\s]+)')
 FP_RE = re.compile(r'\b([A-F0-9]{40})\b', re.I)
@@ -16,9 +17,7 @@ def validate_webtunnel_line(line: str) -> bool:
     if not FP_RE.search(line):
         return False
 
-    m = VER_RE.search(line)
-
-    if not m:
+    if not VER_RE.search(line):
         return False
 
     return True
@@ -26,14 +25,14 @@ def validate_webtunnel_line(line: str) -> bool:
 
 async def tor_bootstrap_webtunnel(
     bridge_line: str,
-    timeout: int = 60
+    timeout: int = 90
 ) -> bool:
 
     temp_dir = tempfile.mkdtemp(prefix='tor_wt_')
 
     torrc = f'''
 UseBridges 1
-ClientTransportPlugin webtunnel exec /usr/bin/webtunnel
+ClientTransportPlugin webtunnel exec /usr/bin/lyrebird
 Bridge {bridge_line}
 SocksPort auto
 DataDirectory {temp_dir}
@@ -69,26 +68,23 @@ Log notice stdout
 
                 text = line.decode(errors='ignore')
 
-                # bridge реально заработал
                 if 'Bootstrapped 100%' in text:
                     proc.kill()
                     return True
 
-                # bridge мертвый
-                bad = [
-                    'proxy client failed',
-                    'general SOCKS server failure',
-                    'connection refused',
-                    'handshake failed',
-                    'bridge unreachable',
-                    'invalid response',
-                    'timeout',
-                    'TLS error',
-                    'websocket',
-                    'failed'
-                ]
-
                 lower = text.lower()
+
+                bad = [
+                    'failed',
+                    'timeout',
+                    'connection refused',
+                    'bridge unreachable',
+                    'general socks server failure',
+                    'proxy client failed',
+                    'handshake',
+                    'websocket',
+                    'tls error',
+                ]
 
                 if any(x in lower for x in bad):
                     proc.kill()
@@ -103,20 +99,10 @@ Log notice stdout
 
     finally:
 
-        try:
-            for root, dirs, files in os.walk(
-                temp_dir,
-                topdown=False
-            ):
-                for name in files:
-                    os.remove(os.path.join(root, name))
-                for name in dirs:
-                    os.rmdir(os.path.join(root, name))
-
-            os.rmdir(temp_dir)
-
-        except:
-            pass
+        shutil.rmtree(
+            temp_dir,
+            ignore_errors=True
+        )
 
     return False
 
