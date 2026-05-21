@@ -19,7 +19,7 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install system packages
+      - name: Install packages
         run: |
           sudo apt update
 
@@ -29,16 +29,16 @@ jobs:
             wget \
             unzip
 
-      - name: Download webtunnel source
+      - name: Download webtunnel
         run: |
           wget -O webtunnel.zip \
-            https://github.com/tn3w/webtunnel/archive/refs/heads/main.zip
+            https://codeload.github.com/tn3w/webtunnel/zip/refs/heads/master
 
           unzip webtunnel.zip
 
       - name: Build webtunnel-client
         run: |
-          cd webtunnel-main/client
+          cd webtunnel-master/client
 
           go build -o webtunnel-client
 
