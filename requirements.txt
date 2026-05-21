@@ -2,3 +2,4 @@ aiohttp
 aiofiles
 aiodns
 geoip2
+aiogram>=3.0
