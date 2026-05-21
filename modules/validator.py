@@ -24,14 +24,7 @@ def valid_webtunnel(line: str) -> bool:
     if not FP_RE.search(line):
         return False
 
-    m = VER_RE.search(line)
-
-    if not m:
-        return False
-
-    version = tuple(map(int, m.groups()))
-
-    if version < (0, 0, 1):
+    if not VER_RE.search(line):
         return False
 
     return True
