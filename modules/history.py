@@ -27,7 +27,6 @@ def update_entry(history: dict, fp: str, latency: int) -> dict:
         history[fp] = {'seen': 0, 'avg_latency': latency, 'last_seen': today}
     entry = history[fp]
     entry['seen'] += 1
-    # скользящее среднее латентности
     entry['avg_latency'] = round(
         entry['avg_latency'] * 0.7 + latency * 0.3
     )
@@ -37,8 +36,16 @@ def update_entry(history: dict, fp: str, latency: int) -> dict:
 
 def history_score(history: dict, fp: str) -> int:
     if fp not in history:
-        return -10   # новый — штраф за неизвестность
-    seen = history[fp]['seen']
+        return -10  # новый — не доверяем
+
+    entry = history[fp]
+    seen = entry['seen']
+    avg_lat = entry['avg_latency']
+
+    # хронически медленный (3+ проверок и всегда > 600мс) — штраф
+    if seen >= 3 and avg_lat > 600:
+        return -20
+
     if seen >= 10:
         return 30
     if seen >= 5:
