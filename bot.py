@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.INFO)
 BOT_TOKEN = os.environ['TELEGRAM_BOT_TOKEN']
 BRIDGES_BASE_URL = 'https://raw.githubusercontent.com/Wind7077/torb/main/bridges'
 
-bot = Bot(token=BOT_TOKEN)
+BOT_TOKEN = os.environ['TG_BOT_TOKEN']
 dp = Dispatcher()
 
 BRIDGE_TYPES = {
