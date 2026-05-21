@@ -1,294 +1,248 @@
 import asyncio
 import aiohttp
+import re
+import ssl
 import time
-
+from collections import defaultdict
 from pathlib import Path
 
-from modules.validator import (
-    validate_bridge,
-    normalize
-)
-
-from modules.parser import (
-    extract_host_port
-)
-
+from modules.validator import validate_bridge, normalize
+from modules.parser import extract_host_port
 
 OUTPUT_DIR = Path('bridges')
+TOP_N = 15
+SEM = asyncio.Semaphore(200)
 
-SEM = asyncio.Semaphore(300)
 
+# ── Fetch ────────────────────────────────────────────────────────────────────
 
 async def fetch(session, url):
-
     try:
-
-        async with session.get(
-            url,
-            timeout=aiohttp.ClientTimeout(total=30)
-        ) as response:
-
-            if response.status != 200:
-
-                print(
-                    f'[BAD STATUS] {url} -> {response.status}'
-                )
-
+        async with session.get(url, timeout=aiohttp.ClientTimeout(total=30)) as r:
+            if r.status != 200:
+                print(f'[BAD] {url} -> {r.status}')
                 return ''
-
-            print(
-                f'[OK] {url}'
-            )
-
-            return await response.text()
-
+            print(f'[OK] {url}')
+            return await r.text()
     except Exception as e:
-
-        print(
-            f'[FETCH ERROR] {url} -> {e}'
-        )
-
+        print(f'[ERR] {url} -> {e}')
         return ''
 
 
-async def measure_latency(
-    host,
-    port,
-    timeout=3
-):
+# ── Latency / TCP check ───────────────────────────────────────────────────────
 
+async def tcp_latency(host, port, timeout=8, use_tls=False):
     try:
-
         async with SEM:
-
             start = time.perf_counter()
-
-            reader, writer = await asyncio.wait_for(
-                asyncio.open_connection(
-                    host,
-                    port
-                ),
-                timeout=timeout
-            )
-
-            latency = round(
-                (time.perf_counter() - start) * 1000
-            )
-
+            if use_tls:
+                ctx = ssl.create_default_context()
+                ctx.check_hostname = False
+                ctx.verify_mode = ssl.CERT_NONE
+                _, writer = await asyncio.wait_for(
+                    asyncio.open_connection(host, port, ssl=ctx), timeout=timeout)
+            else:
+                _, writer = await asyncio.wait_for(
+                    asyncio.open_connection(host, port), timeout=timeout)
+            ms = round((time.perf_counter() - start) * 1000)
             writer.close()
-
-            await writer.wait_closed()
-
-            return latency
-
+            return ms
     except:
+        return None  # None = мёртвый
 
-        return 99999
 
-
-async def process_bridge(line):
-
-    line = normalize(line)
-
-    if not line:
+async def webtunnel_latency(line, timeout=10):
+    m = re.search(r'url=(https://[^ ]+)', line)
+    if not m:
+        return None
+    url = m.group(1)
+    try:
+        async with SEM:
+            start = time.perf_counter()
+            ctx = ssl.create_default_context()
+            conn = aiohttp.TCPConnector(ssl=ctx)
+            async with aiohttp.ClientSession(connector=conn) as s:
+                async with s.get(url, timeout=aiohttp.ClientTimeout(total=timeout),
+                                 allow_redirects=True) as resp:
+                    if resp.status >= 500:
+                        return None
+                    return round((time.perf_counter() - start) * 1000)
+    except:
         return None
 
-    transport = validate_bridge(line)
 
+# ── Scoring ───────────────────────────────────────────────────────────────────
+
+def port_score(port: int) -> int:
+    if port == 443:   return 30
+    if port == 8443:  return 20
+    if port == 80:    return 15
+    if port == 8080:  return 10
+    if port > 50000:  return -20
+    return 0
+
+
+def latency_score(ms: int) -> int:
+    if ms < 100:  return 40
+    if ms < 300:  return 25
+    if ms < 600:  return 10
+    if ms < 1000: return 0
+    return -10
+
+
+# ── Cluster filter (/24) ──────────────────────────────────────────────────────
+
+def slash24(ip: str) -> str:
+    parts = ip.split('.')
+    return '.'.join(parts[:3])
+
+
+def dedupe_and_cluster(bridges: list) -> list:
+    """
+    - Дедупликация по IP+PORT+FINGERPRINT (первые 8 hex).
+    - Из каждого /24 оставляем не более 2 мостов.
+    """
+    seen_key = set()
+    cluster_count = defaultdict(int)
+    result = []
+
+    for b in bridges:
+        hp = extract_host_port(b['line'])
+        if not hp:
+            continue
+        host, port = hp
+
+        # fingerprint — первые 8 символов (если есть)
+        parts = b['line'].split()
+        fp = next((p for p in parts if re.match(r'^[0-9A-F]{40}$', p, re.I)), '')[:8]
+        key = f'{host}:{port}:{fp}'
+
+        if key in seen_key:
+            continue
+        seen_key.add(key)
+
+        # cluster /24 только для IPv4
+        if re.match(r'^\d+\.\d+\.\d+\.\d+$', host):
+            net = slash24(host)
+            if cluster_count[net] >= 2:
+                continue
+            cluster_count[net] += 1
+
+        result.append(b)
+
+    return result
+
+
+# ── Process one bridge ────────────────────────────────────────────────────────
+
+async def process_bridge(raw_line: str):
+    line = normalize(raw_line)
+    if not line or line.startswith('#'):
+        return None
+
+    # normalize Bridge prefix for validate
+    check_line = line
+    if check_line.lower().startswith('bridge '):
+        check_line = check_line[7:].strip()
+
+    transport = validate_bridge(line)
     if not transport:
         return None
 
-    latency = 99999
+    hp = extract_host_port(line)
 
-    if transport != 'webtunnel':
+    if transport == 'webtunnel':
+        ms = await webtunnel_latency(line)
+    elif hp:
+        host, port = hp
+        ms = await tcp_latency(host, port)
+    else:
+        ms = None
 
-        hp = extract_host_port(line)
+    if ms is None:
+        return None  # мёртвый — выбрасываем
 
-        if hp:
-
-            host, port = hp
-
-            latency = await measure_latency(
-                host,
-                port
-            )
+    score = latency_score(ms)
+    if hp:
+        _, port = hp
+        score += port_score(port)
 
     return {
-        'line': line,
-        'latency': latency,
-        'transport': transport
+        'line': check_line,  # без Bridge-префикса
+        'transport': transport,
+        'latency': ms,
+        'score': score,
     }
 
 
-async def save_file(
-    filename,
-    lines
-):
-
-    path = OUTPUT_DIR / filename
-
-    with open(
-        path,
-        'w',
-        encoding='utf-8'
-    ) as f:
-
-        f.write(
-            '\n'.join(lines)
-        )
-
-    print(
-        f'[SAVED] {path} ({len(lines)} lines)'
-    )
-
+# ── Main ──────────────────────────────────────────────────────────────────────
 
 async def main():
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    OUTPUT_DIR.mkdir(
-        parents=True,
-        exist_ok=True
-    )
-
-    github_sources = open(
-        'sources/github.txt',
-        encoding='utf-8'
-    ).read().splitlines()
-
-    github_sources = [
-        x.strip()
-        for x in github_sources
-        if x.strip()
-    ]
-
-    print(
-        f'[INFO] loaded {len(github_sources)} sources'
-    )
-
-    all_lines = set()
+    urls = [u.strip() for u in
+            open('sources/github.txt', encoding='utf-8').readlines()
+            if u.strip()]
+    print(f'[INFO] источников: {len(urls)}')
 
     async with aiohttp.ClientSession() as session:
+        pages = await asyncio.gather(*[fetch(session, u) for u in urls])
 
-        tasks = [
-            fetch(session, url)
-            for url in github_sources
-        ]
-
-        pages = await asyncio.gather(*tasks)
-
+    raw = set()
     for page in pages:
-
         for line in page.splitlines():
-
             line = normalize(line)
+            if line and not line.startswith('#'):
+                raw.add(line)
 
-            if not line:
-                continue
+    print(f'[INFO] уникальных строк: {len(raw)}')
 
-            if line.startswith('#'):
-                continue
+    results = await asyncio.gather(*[process_bridge(l) for l in raw])
+    alive = [r for r in results if r]
+    print(f'[INFO] живых мостов: {len(alive)}')
 
-            all_lines.add(line)
-
-    print(
-        f'[INFO] loaded {len(all_lines)} raw lines'
+    # Кластеризация и дедупликация
+    alive = dedupe_and_cluster(
+        sorted(alive, key=lambda x: -x['score'])
     )
+    print(f'[INFO] после кластеризации: {len(alive)}')
 
-    tasks = [
-        process_bridge(line)
-        for line in all_lines
-    ]
+    # Сортировка: score desc, latency asc
+    alive.sort(key=lambda x: (-x['score'], x['latency']))
 
-    results = await asyncio.gather(*tasks)
+    # Вывод статистики
+    by_type = defaultdict(list)
+    for b in alive:
+        by_type[b['transport']].append(b)
+    for t, lst in by_type.items():
+        print(f'[INFO] {t}: {len(lst)}')
 
-    bridges = [
-        r for r in results
-        if r
-    ]
-
-    print(
-        f'[INFO] processed {len(bridges)} bridges'
-    )
-
-    bridges.sort(
-        key=lambda x: x['latency']
-    )
-
+    # Топ-15 mixed (лучшие по score, по 1 от каждого типа по кругу если можно)
     mixed = []
-    obfs4 = []
-    webtunnel = []
-    vanilla = []
-    snowflake = []
+    buckets = {t: list(v) for t, v in by_type.items()}
+    types = [t for t in ['obfs4', 'webtunnel', 'vanilla', 'snowflake'] if t in buckets]
+    i = 0
+    while len(mixed) < TOP_N and any(buckets.get(t) for t in types):
+        t = types[i % len(types)]
+        if buckets.get(t):
+            mixed.append(buckets[t].pop(0))
+        i += 1
 
-    for bridge in bridges:
+    # Файлы
+    def save(name, bridges):
+        path = OUTPUT_DIR / name
+        lines = [b['line'] for b in bridges]
+        path.write_text('\n'.join(lines) + '\n', encoding='utf-8')
+        print(f'[SAVED] {path} ({len(lines)})')
 
-        line = bridge['line']
+    save('mixed.txt', mixed)
+    save('obfs4.txt', by_type.get('obfs4', [])[:TOP_N])
+    save('webtunnel.txt', by_type.get('webtunnel', [])[:TOP_N])
+    save('vanilla.txt', by_type.get('vanilla', [])[:TOP_N])
+    save('snowflake.txt', by_type.get('snowflake', [])[:TOP_N])
 
-        transport = bridge['transport']
-
-        mixed.append(line)
-
-        if transport == 'obfs4':
-
-            obfs4.append(line)
-
-        elif transport == 'webtunnel':
-
-            webtunnel.append(line)
-
-        elif transport == 'vanilla':
-
-            vanilla.append(line)
-
-        elif transport == 'snowflake':
-
-            snowflake.append(line)
-
-    print(
-        f'[INFO] obfs4={len(obfs4)}'
-    )
-
-    print(
-        f'[INFO] webtunnel={len(webtunnel)}'
-    )
-
-    print(
-        f'[INFO] vanilla={len(vanilla)}'
-    )
-
-    print(
-        f'[INFO] snowflake={len(snowflake)}'
-    )
-
-    await save_file(
-        'mixed.txt',
-        mixed
-    )
-
-    await save_file(
-        'obfs4.txt',
-        obfs4
-    )
-
-    await save_file(
-        'webtunnel.txt',
-        webtunnel
-    )
-
-    await save_file(
-        'vanilla.txt',
-        vanilla
-    )
-
-    await save_file(
-        'snowflake.txt',
-        snowflake
-    )
-
-    print(
-        f'[DONE] saved {len(bridges)} bridges'
-    )
+    print(f'[DONE] mixed.txt: {len(mixed)} мостов')
 
 
 if __name__ == '__main__':
-
     asyncio.run(main())
