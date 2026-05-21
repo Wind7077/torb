@@ -1,24 +1,28 @@
 import asyncio
 import aiohttp
 import re
-import ssl
-import time
 from collections import defaultdict
 from pathlib import Path
 
 from modules.validator import validate_bridge, normalize
 from modules.parser import extract_host_port
+from modules.checker import reliable_check
+from modules.webtunnel_checker import reliable_webtunnel_check, version_score
+from modules.history import load_history, save_history, update_entry, history_score
+from modules.geoip import get_country, country_score, country_limit_ok
 
 OUTPUT_DIR = Path('bridges')
 TOP_N = 15
-SEM = asyncio.Semaphore(200)
+FP_RE = re.compile(r'\b([0-9A-F]{40})\b', re.I)
 
 
-# ── Fetch ────────────────────────────────────────────────────────────────────
+# ── Fetch ─────────────────────────────────────────────────────────────────────
 
-async def fetch(session, url):
+async def fetch(session, url: str) -> str:
     try:
-        async with session.get(url, timeout=aiohttp.ClientTimeout(total=30)) as r:
+        async with session.get(
+            url, timeout=aiohttp.ClientTimeout(total=30)
+        ) as r:
             if r.status != 200:
                 print(f'[BAD] {url} -> {r.status}')
                 return ''
@@ -29,49 +33,7 @@ async def fetch(session, url):
         return ''
 
 
-# ── Latency / TCP check ───────────────────────────────────────────────────────
-
-async def tcp_latency(host, port, timeout=8, use_tls=False):
-    try:
-        async with SEM:
-            start = time.perf_counter()
-            if use_tls:
-                ctx = ssl.create_default_context()
-                ctx.check_hostname = False
-                ctx.verify_mode = ssl.CERT_NONE
-                _, writer = await asyncio.wait_for(
-                    asyncio.open_connection(host, port, ssl=ctx), timeout=timeout)
-            else:
-                _, writer = await asyncio.wait_for(
-                    asyncio.open_connection(host, port), timeout=timeout)
-            ms = round((time.perf_counter() - start) * 1000)
-            writer.close()
-            return ms
-    except:
-        return None  # None = мёртвый
-
-
-async def webtunnel_latency(line, timeout=10):
-    m = re.search(r'url=(https://[^ ]+)', line)
-    if not m:
-        return None
-    url = m.group(1)
-    try:
-        async with SEM:
-            start = time.perf_counter()
-            ctx = ssl.create_default_context()
-            conn = aiohttp.TCPConnector(ssl=ctx)
-            async with aiohttp.ClientSession(connector=conn) as s:
-                async with s.get(url, timeout=aiohttp.ClientTimeout(total=timeout),
-                                 allow_redirects=True) as resp:
-                    if resp.status >= 500:
-                        return None
-                    return round((time.perf_counter() - start) * 1000)
-    except:
-        return None
-
-
-# ── Scoring ───────────────────────────────────────────────────────────────────
+# ── Scoring helpers ───────────────────────────────────────────────────────────
 
 def port_score(port: int) -> int:
     if port == 443:   return 30
@@ -90,95 +52,140 @@ def latency_score(ms: int) -> int:
     return -10
 
 
-# ── Cluster filter (/24) ──────────────────────────────────────────────────────
-
 def slash24(ip: str) -> str:
-    parts = ip.split('.')
-    return '.'.join(parts[:3])
+    return '.'.join(ip.split('.')[:3])
 
 
-def dedupe_and_cluster(bridges: list) -> list:
-    """
-    - Дедупликация по IP+PORT+FINGERPRINT (первые 8 hex).
-    - Из каждого /24 оставляем не более 2 мостов.
-    """
-    seen_key = set()
-    cluster_count = defaultdict(int)
-    result = []
+def extract_fp(line: str) -> str:
+    m = FP_RE.search(line)
+    return m.group(1).upper() if m else ''
 
-    for b in bridges:
-        hp = extract_host_port(b['line'])
-        if not hp:
-            continue
+
+# ── Process one bridge ────────────────────────────────────────────────────────
+
+async def process_bridge(raw: str, history: dict) -> dict | None:
+    line = normalize(raw)
+    if not line or line.startswith('#'):
+        return None
+
+    # Убираем Bridge-префикс для валидации
+    clean = line[7:].strip() if line.lower().startswith('bridge ') else line
+    transport = validate_bridge(clean)
+    if not transport:
+        return None
+
+    hp = extract_host_port(clean)
+    fp = extract_fp(clean)
+
+    # ── Живость ──
+    if transport == 'webtunnel':
+        ms = await reliable_webtunnel_check(clean)
+    elif hp:
         host, port = hp
+        ms = await reliable_check(host, port)
+    else:
+        return None
 
-        # fingerprint — первые 8 символов (если есть)
-        parts = b['line'].split()
-        fp = next((p for p in parts if re.match(r'^[0-9A-F]{40}$', p, re.I)), '')[:8]
-        key = f'{host}:{port}:{fp}'
+    if ms is None:
+        return None  # мёртвый
 
-        if key in seen_key:
-            continue
-        seen_key.add(key)
+    # ── Score ──
+    score = latency_score(ms)
 
-        # cluster /24 только для IPv4
+    if hp:
+        _, port = hp
+        score += port_score(port)
+
+    if transport == 'webtunnel':
+        score += version_score(clean)
+
+    score += history_score(history, fp)
+
+    country = 'XX'
+    if hp:
+        host, _ = hp
         if re.match(r'^\d+\.\d+\.\d+\.\d+$', host):
-            net = slash24(host)
-            if cluster_count[net] >= 2:
+            country = get_country(host)
+            score += country_score(country)
+
+    return {
+        'line': clean,
+        'transport': transport,
+        'latency': ms,
+        'score': score,
+        'fp': fp,
+        'country': country,
+        'hp': hp,
+    }
+
+
+# ── Dedupe + cluster filter ───────────────────────────────────────────────────
+
+def dedupe_and_filter(bridges: list) -> list:
+    seen_fp = set()           # дедупликация по полному fingerprint
+    seen_ipport = set()       # дедупликация по IP:PORT
+    cluster24 = defaultdict(int)   # /24 лимит
+    country_count = defaultdict(int)  # страновой лимит
+
+    result = []
+    for b in bridges:
+        fp = b['fp']
+        hp = b['hp']
+
+        # Дедупликация по fingerprint
+        if fp and fp in seen_fp:
+            continue
+        if fp:
+            seen_fp.add(fp)
+
+        # Дедупликация по IP:PORT
+        if hp:
+            key = f'{hp[0]}:{hp[1]}'
+            if key in seen_ipport:
                 continue
-            cluster_count[net] += 1
+            seen_ipport.add(key)
+
+        # Кластер /24
+        if hp and re.match(r'^\d+\.\d+\.\d+\.\d+$', hp[0]):
+            net = slash24(hp[0])
+            if cluster24[net] >= 2:
+                continue
+            cluster24[net] += 1
+
+        # Страновой лимит (не более 3 из одной страны в топ)
+        c = b['country']
+        if c != 'XX' and not country_limit_ok(country_count, c, limit=3):
+            continue
+        country_count[c] += 1
 
         result.append(b)
 
     return result
 
 
-# ── Process one bridge ────────────────────────────────────────────────────────
+# ── Build mixed top-N with type rotation ─────────────────────────────────────
 
-async def process_bridge(raw_line: str):
-    line = normalize(raw_line)
-    if not line or line.startswith('#'):
-        return None
-
-    # normalize Bridge prefix for validate
-    check_line = line
-    if check_line.lower().startswith('bridge '):
-        check_line = check_line[7:].strip()
-
-    transport = validate_bridge(line)
-    if not transport:
-        return None
-
-    hp = extract_host_port(line)
-
-    if transport == 'webtunnel':
-        ms = await webtunnel_latency(line)
-    elif hp:
-        host, port = hp
-        ms = await tcp_latency(host, port)
-    else:
-        ms = None
-
-    if ms is None:
-        return None  # мёртвый — выбрасываем
-
-    score = latency_score(ms)
-    if hp:
-        _, port = hp
-        score += port_score(port)
-
-    return {
-        'line': check_line,  # без Bridge-префикса
-        'transport': transport,
-        'latency': ms,
-        'score': score,
-    }
+def build_mixed(by_type: dict, n: int) -> list:
+    buckets = {t: list(v) for t, v in by_type.items()}
+    order = [t for t in ['obfs4', 'webtunnel', 'vanilla', 'snowflake']
+             if t in buckets]
+    mixed = []
+    i = 0
+    while len(mixed) < n and any(buckets.get(t) for t in order):
+        t = order[i % len(order)]
+        if buckets.get(t):
+            mixed.append(buckets[t].pop(0))
+        i += 1
+    return mixed
 
 
 # ── Main ──────────────────────────────────────────────────────────────────────
 
 async def main():
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
+    history = load_history()
+    print(f'[INFO] история: {len(history)} записей')
 
     urls = [u.strip() for u in
             open('sources/github.txt', encoding='utf-8').readlines()
@@ -194,47 +201,40 @@ async def main():
             line = normalize(line)
             if line and not line.startswith('#'):
                 raw.add(line)
-
     print(f'[INFO] уникальных строк: {len(raw)}')
 
-    results = await asyncio.gather(*[process_bridge(l) for l in raw])
+    results = await asyncio.gather(*[process_bridge(l, history) for l in raw])
     alive = [r for r in results if r]
-    print(f'[INFO] живых мостов: {len(alive)}')
+    print(f'[INFO] живых мостов (2x retry): {len(alive)}')
 
-    # Кластеризация и дедупликация
-    alive = dedupe_and_cluster(
-        sorted(alive, key=lambda x: -x['score'])
-    )
-    print(f'[INFO] после кластеризации: {len(alive)}')
+    # Обновляем историю для живых мостов
+    for b in alive:
+        if b['fp']:
+            history = update_entry(history, b['fp'], b['latency'])
+    save_history(history)
+    print(f'[INFO] история сохранена: {len(history)} записей')
 
     # Сортировка: score desc, latency asc
     alive.sort(key=lambda x: (-x['score'], x['latency']))
 
-    # Вывод статистики
+    # Дедупликация и кластеризация
+    alive = dedupe_and_filter(alive)
+    print(f'[INFO] после фильтров: {len(alive)}')
+
     by_type = defaultdict(list)
     for b in alive:
         by_type[b['transport']].append(b)
+
     for t, lst in by_type.items():
-        print(f'[INFO] {t}: {len(lst)}')
+        print(f'[INFO] {t}: {len(lst)} | лучший score={lst[0]["score"]} lat={lst[0]["latency"]}ms')
 
-    # Топ-15 mixed (лучшие по score, по 1 от каждого типа по кругу если можно)
-    mixed = []
-    buckets = {t: list(v) for t, v in by_type.items()}
-    types = [t for t in ['obfs4', 'webtunnel', 'vanilla', 'snowflake'] if t in buckets]
-    i = 0
-    while len(mixed) < TOP_N and any(buckets.get(t) for t in types):
-        t = types[i % len(types)]
-        if buckets.get(t):
-            mixed.append(buckets[t].pop(0))
-        i += 1
-
-    # Файлы
     def save(name, bridges):
         path = OUTPUT_DIR / name
         lines = [b['line'] for b in bridges]
         path.write_text('\n'.join(lines) + '\n', encoding='utf-8')
         print(f'[SAVED] {path} ({len(lines)})')
 
+    mixed = build_mixed(by_type, TOP_N)
     save('mixed.txt', mixed)
     save('obfs4.txt', by_type.get('obfs4', [])[:TOP_N])
     save('webtunnel.txt', by_type.get('webtunnel', [])[:TOP_N])
