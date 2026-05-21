@@ -57,7 +57,7 @@ async def main():
     async def cmd_start(message: Message):
         await message.answer(
             '🧅 <b>Tor Bridges Bot</b>\n\n'
-            'Актуальные рабочие мосты для Tor.\n'
+            'Актуальные рабочие мосты для Tor от Mirka.\n'
             'Обновляются автоматически каждые 2 часа.\n\n'
             'Нажми кнопку чтобы получить мосты 👇',
             reply_markup=main_keyboard(),
