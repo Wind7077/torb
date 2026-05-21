@@ -58,7 +58,6 @@ def format_bridges(text: str, bridge_type: str) -> str:
     result += '<code>'
     result += '\n\n'.join(lines)
     result += '</code>'
-    result += f'\n\n<i>Мостов: {len(lines)} • Обновляется каждые 2 часа</i>'
     return result
 
 
@@ -105,15 +104,14 @@ async def main():
             return
 
         formatted = format_bridges(text, bridge_type)
+        lines = [l.strip() for l in text.splitlines() if l.strip()]
 
         if len(formatted) <= 4096:
             await callback.message.answer(
                 formatted,
-                parse_mode=ParseMode.HTML,
-                reply_markup=main_keyboard()
+                parse_mode=ParseMode.HTML
             )
         else:
-            lines = [l.strip() for l in text.splitlines() if l.strip()]
             label = BRIDGE_TYPES[bridge_type]
             chunk = f'{label}\n\n'
             for line in lines:
@@ -127,9 +125,15 @@ async def main():
             if chunk.strip():
                 await callback.message.answer(
                     f'<code>{chunk}</code>',
-                    parse_mode=ParseMode.HTML,
-                    reply_markup=main_keyboard()
+                    parse_mode=ParseMode.HTML
                 )
+
+        # Отдельное сообщение — не попадает в буфер копирования
+        await callback.message.answer(
+            f'<i>Мостов: {len(lines)} • Обновляется каждые 2 часа</i>',
+            parse_mode=ParseMode.HTML,
+            reply_markup=main_keyboard()
+        )
 
     @dp.callback_query(F.data == 'back')
     async def go_back(callback: CallbackQuery):
