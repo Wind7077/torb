@@ -1,217 +1,274 @@
 import asyncio
 import aiohttp
-import ssl
 import re
-import socket
-from aiohttp import ClientSession
+from collections import defaultdict
+from pathlib import Path
 
-URL_RE = re.compile(r'url=([^\s]+)')
-FPR_RE = re.compile(r'\b([A-F0-9]{40})\b')
-VER_RE = re.compile(r'ver=([^\s]+)')
+from modules.validator import validate_bridge, normalize
+from modules.parser import extract_host_port
+from modules.checker import reliable_check
+from modules.webtunnel_checker import reliable_webtunnel_check, version_score
+from modules.history import load_history, save_history, update_entry, history_score
+from modules.geoip import get_country, country_score, country_limit_ok
+
+OUTPUT_DIR = Path('bridges')
+TOP_N = 15
+FP_RE = re.compile(r'\b([0-9A-F]{40})\b', re.I)
+
+TOP100_URL = 'https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/TOR-BRIDGES/TOR_BRIDGES_TOP100.txt'
 
 
-def is_valid_fingerprint(line: str) -> bool:
-    m = FPR_RE.search(line)
-    return bool(m)
+# ── Fetch ─────────────────────────────────────────────────────────────────────
+
+async def fetch(session, url: str) -> str:
+    try:
+        async with session.get(
+            url, timeout=aiohttp.ClientTimeout(total=30)
+        ) as r:
+            if r.status != 200:
+                print(f'[BAD] {url} -> {r.status}')
+                return ''
+            print(f'[OK] {url}')
+            return await r.text()
+    except Exception as e:
+        print(f'[ERR] {url} -> {e}')
+        return ''
 
 
-def get_webtunnel_version(line: str):
-    m = VER_RE.search(line)
+# ── Scoring helpers ───────────────────────────────────────────────────────────
 
-    if not m:
+def port_score(port: int) -> int:
+    if port == 443:  return 30
+    if port == 8443: return 20
+    if port == 80:   return 15
+    if port == 8080: return 10
+    if port > 50000: return -20
+    return 0
+
+
+def latency_score(ms: int) -> int:
+    if ms < 100:  return 40
+    if ms < 300:  return 25
+    if ms < 600:  return 10
+    if ms < 1000: return 0
+    return -10
+
+
+def slash24(ip: str) -> str:
+    return '.'.join(ip.split('.')[:3])
+
+
+def extract_fp(line: str) -> str:
+    m = FP_RE.search(line)
+    return m.group(1).upper() if m else ''
+
+
+# ── Process one bridge ────────────────────────────────────────────────────────
+
+async def process_bridge(raw: str, history: dict, top100_fps: set) -> dict | None:
+    line = normalize(raw)
+    if not line or line.startswith('#'):
         return None
 
-    return m.group(1).strip()
-
-
-def has_valid_url(line: str) -> bool:
-    m = URL_RE.search(line)
-
-    if not m:
-        return False
-
-    url = m.group(1)
-
-    return url.startswith('https://')
-
-
-def validate_bridge(line: str):
-
-    line = line.strip()
-
-    if not line:
+    clean = line[7:].strip() if line.lower().startswith('bridge ') else line
+    transport = validate_bridge(clean)
+    if not transport:
         return None
 
-    lower = line.lower()
+    hp = extract_host_port(clean)
+    fp = extract_fp(clean)
 
-    if lower.startswith('obfs4 '):
-        return 'obfs4'
+    # ── Живость ──
+    if transport == 'webtunnel':
+        ms = await reliable_webtunnel_check(clean)
+    elif hp:
+        host, port = hp
+        ms = await reliable_check(host, port)
+    else:
+        return None
 
-    if lower.startswith('vanilla '):
-        return 'vanilla'
+    if ms is None:
+        return None
 
-    if lower.startswith('webtunnel '):
+    # ── Score ──
+    score = latency_score(ms)
 
-        if not has_valid_url(line):
-            return None
+    if hp:
+        _, port = hp
+        score += port_score(port)
 
-        if not is_valid_fingerprint(line):
-            return None
+    if transport == 'webtunnel':
+        score += version_score(clean)
 
-        version = get_webtunnel_version(line)
+    score += history_score(history, fp, transport)
 
-        if version is None:
-            return None
+    # бонус за проверку из РФ (igareck TOP100)
+    if fp and fp in top100_fps:
+        score += 25
 
-        # старые webtunnel часто мертвые
-        if version == '0.0.1':
-            return None
+    country = 'XX'
+    if hp:
+        host, _ = hp
+        if re.match(r'^\d+\.\d+\.\d+\.\d+$', host):
+            country = get_country(host)
+            score += country_score(country)
 
-        return 'webtunnel'
-
-    return None
-
-
-async def validate_webtunnel_transport(url: str) -> bool:
-
-    timeout = aiohttp.ClientTimeout(total=15)
-
-    ssl_ctx = ssl.create_default_context()
-
-    headers = {
-        'User-Agent': 'Mozilla/5.0',
-        'Upgrade': 'websocket',
-        'Connection': 'Upgrade'
+    return {
+        'line': clean,
+        'transport': transport,
+        'latency': ms,
+        'score': score,
+        'fp': fp,
+        'country': country,
+        'hp': hp,
     }
 
-    try:
 
-        async with ClientSession(
-            timeout=timeout,
-            headers=headers
-        ) as session:
+# ── Dedupe + cluster filter ───────────────────────────────────────────────────
 
-            async with session.get(
-                url,
-                ssl=ssl_ctx,
-                allow_redirects=True
-            ) as r:
-
-                # endpoint мертв
-                if r.status >= 400:
-                    return False
-
-                # нужен HTTP/2
-                if r.version.major < 2:
-                    return False
-
-                return True
-
-    except Exception:
-        return False
+TRUSTED_NETS = {'185.177.207'}
 
 
-async def validate_tcp(host: str, port: int) -> bool:
+def dedupe_and_filter(bridges: list) -> list:
+    seen_fp = set()
+    seen_ipport = set()
+    cluster24 = defaultdict(int)
+    country_count = defaultdict(int)
 
-    try:
+    result = []
+    for b in bridges:
+        fp = b['fp']
+        hp = b['hp']
 
-        fut = asyncio.open_connection(host, port)
+        # дедупликация по полному fingerprint
+        if fp and fp in seen_fp:
+            continue
+        if fp:
+            seen_fp.add(fp)
 
-        reader, writer = await asyncio.wait_for(fut, timeout=10)
+        # дедупликация по IP:PORT
+        if hp:
+            key = f'{hp[0]}:{hp[1]}'
+            if key in seen_ipport:
+                continue
+            seen_ipport.add(key)
 
-        writer.close()
+        # кластер /24 — для надёжных ферм лимит мягче
+        if hp and re.match(r'^\d+\.\d+\.\d+\.\d+$', hp[0]):
+            net = slash24(hp[0])
+            limit = 4 if net in TRUSTED_NETS else 2
+            if cluster24[net] >= limit:
+                continue
+            cluster24[net] += 1
 
-        await writer.wait_closed()
+        # страновой лимит — максимум 3 из одной страны
+        c = b['country']
+        if c != 'XX' and not country_limit_ok(country_count, c, limit=3):
+            continue
+        country_count[c] += 1
 
-        return True
+        result.append(b)
 
-    except Exception:
-        return False
-
-
-async def check_bridge(line: str):
-
-    bridge_type = validate_bridge(line)
-
-    if not bridge_type:
-        return None
-
-    # webtunnel
-    if bridge_type == 'webtunnel':
-
-        m = URL_RE.search(line)
-
-        if not m:
-            return None
-
-        url = m.group(1)
-
-        ok = await validate_webtunnel_transport(url)
-
-        if ok:
-            return line
-
-        return None
-
-    # vanilla / obfs4
-    try:
-
-        parts = line.split()
-
-        hostport = parts[1]
-
-        if hostport.startswith('['):
-
-            hp = hostport.split(']:')
-
-            host = hp[0][1:]
-
-            port = int(hp[1])
-
-        else:
-
-            host, port = hostport.split(':')
-
-            port = int(port)
-
-        ok = await validate_tcp(host, port)
-
-        if ok:
-            return line
-
-        return None
-
-    except Exception:
-        return None
+    return result
 
 
-async def process_bridges(input_file, output_file):
+# ── Build mixed top-N with type rotation ──────────────────────────────────────
 
-    with open(input_file, 'r', encoding='utf-8') as f:
-        lines = [x.strip() for x in f.readlines() if x.strip()]
+def build_mixed(by_type: dict, n: int) -> list:
+    buckets = {t: list(v) for t, v in by_type.items()}
+    order = [t for t in ['obfs4', 'webtunnel', 'vanilla', 'snowflake']
+             if t in buckets]
+    mixed = []
+    i = 0
+    while len(mixed) < n and any(buckets.get(t) for t in order):
+        t = order[i % len(order)]
+        if buckets.get(t):
+            mixed.append(buckets[t].pop(0))
+        i += 1
+    return mixed
 
-    tasks = []
 
-    for line in lines:
-        tasks.append(check_bridge(line))
+# ── Main ──────────────────────────────────────────────────────────────────────
 
-    results = await asyncio.gather(*tasks)
+async def main():
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    working = [x for x in results if x]
+    history = load_history()
+    print(f'[INFO] история: {len(history)} записей')
 
-    with open(output_file, 'w', encoding='utf-8') as f:
+    urls = [u.strip() for u in
+            open('sources/github.txt', encoding='utf-8').readlines()
+            if u.strip()]
 
-        for line in working:
-            f.write(line + '\n')
+    # убеждаемся что TOP100 есть в списке источников
+    if TOP100_URL not in urls:
+        urls.append(TOP100_URL)
 
-    print(f'working bridges: {len(working)}')
+    print(f'[INFO] источников: {len(urls)}')
+
+    async with aiohttp.ClientSession() as session:
+        pages = await asyncio.gather(*[fetch(session, u) for u in urls])
+
+    # собираем строки и отдельно fingerprints из TOP100
+    raw = set()
+    top100_fps = set()
+
+    for url, page in zip(urls, pages):
+        for line in page.splitlines():
+            line = normalize(line)
+            if not line or line.startswith('#'):
+                continue
+            raw.add(line)
+            if url == TOP100_URL:
+                fp = extract_fp(line)
+                if fp:
+                    top100_fps.add(fp)
+
+    print(f'[INFO] уникальных строк: {len(raw)}')
+    print(f'[INFO] fingerprints из TOP100: {len(top100_fps)}')
+
+    results = await asyncio.gather(*[
+        process_bridge(l, history, top100_fps) for l in raw
+    ])
+    alive = [r for r in results if r]
+    print(f'[INFO] живых мостов (2x retry): {len(alive)}')
+
+    # обновляем историю для живых
+    for b in alive:
+        if b['fp']:
+            history = update_entry(history, b['fp'], b['latency'])
+    save_history(history)
+    print(f'[INFO] история сохранена: {len(history)} записей')
+
+    # сортировка: score desc, latency asc
+    alive.sort(key=lambda x: (-x['score'], x['latency']))
+
+    # дедупликация и кластеризация
+    alive = dedupe_and_filter(alive)
+    print(f'[INFO] после фильтров: {len(alive)}')
+
+    by_type = defaultdict(list)
+    for b in alive:
+        by_type[b['transport']].append(b)
+
+    for t, lst in by_type.items():
+        print(f'[INFO] {t}: {len(lst)} | лучший score={lst[0]["score"]} lat={lst[0]["latency"]}ms')
+
+    def save(name, bridges):
+        path = OUTPUT_DIR / name
+        lines = [b['line'] for b in bridges]
+        path.write_text('\n'.join(lines) + '\n', encoding='utf-8')
+        print(f'[SAVED] {path} ({len(lines)})')
+
+    mixed = build_mixed(by_type, TOP_N)
+    save('mixed.txt', mixed)
+    save('obfs4.txt', by_type.get('obfs4', [])[:TOP_N])
+    save('webtunnel.txt', by_type.get('webtunnel', [])[:TOP_N])
+    save('vanilla.txt', by_type.get('vanilla', [])[:TOP_N])
+    save('snowflake.txt', by_type.get('snowflake', [])[:TOP_N])
+
+    print(f'[DONE] mixed.txt: {len(mixed)} мостов')
 
 
 if __name__ == '__main__':
-
-    asyncio.run(
-        process_bridges(
-            'bridges.txt',
-            'working_bridges.txt'
-        )
-    )
+    asyncio.run(main())
