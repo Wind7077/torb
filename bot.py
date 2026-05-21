@@ -49,18 +49,6 @@ async def fetch_bridges(bridge_type: str) -> str | None:
         return None
 
 
-def format_bridges(text: str, bridge_type: str) -> str:
-    lines = [l.strip() for l in text.splitlines() if l.strip()]
-    if not lines:
-        return '❌ Список пустой'
-    label = BRIDGE_TYPES[bridge_type]
-    result = f'<b>{label}</b>\n\n'
-    result += '<code>'
-    result += '\n\n'.join(lines)
-    result += '</code>'
-    return result
-
-
 async def main():
     bot = Bot(token=BOT_TOKEN)
     dp = Dispatcher()
@@ -103,8 +91,18 @@ async def main():
             )
             return
 
-        formatted = format_bridges(text, bridge_type)
         lines = [l.strip() for l in text.splitlines() if l.strip()]
+        label = BRIDGE_TYPES[bridge_type]
+
+        # Название — отдельное сообщение, не попадает в копирование
+        await callback.message.answer(
+            f'<b>{label}</b>',
+            parse_mode=ParseMode.HTML
+        )
+
+        # Мосты — чистый code блок без лишнего текста
+        code_text = '\n\n'.join(lines)
+        formatted = f'<code>{code_text}</code>'
 
         if len(formatted) <= 4096:
             await callback.message.answer(
@@ -112,23 +110,25 @@ async def main():
                 parse_mode=ParseMode.HTML
             )
         else:
-            label = BRIDGE_TYPES[bridge_type]
-            chunk = f'{label}\n\n'
+            chunk_lines = []
+            chunk_len = 7  # len('<code>') + len('</code>')
             for line in lines:
-                if len(chunk) + len(line) + 2 > 4000:
+                if chunk_len + len(line) + 2 > 4080:
                     await callback.message.answer(
-                        f'<code>{chunk}</code>',
+                        '<code>' + '\n\n'.join(chunk_lines) + '</code>',
                         parse_mode=ParseMode.HTML
                     )
-                    chunk = ''
-                chunk += line + '\n\n'
-            if chunk.strip():
+                    chunk_lines = []
+                    chunk_len = 7
+                chunk_lines.append(line)
+                chunk_len += len(line) + 2
+            if chunk_lines:
                 await callback.message.answer(
-                    f'<code>{chunk}</code>',
+                    '<code>' + '\n\n'.join(chunk_lines) + '</code>',
                     parse_mode=ParseMode.HTML
                 )
 
-        # Отдельное сообщение — не попадает в буфер копирования
+        # Инфо — отдельное сообщение
         await callback.message.answer(
             f'<i>Мостов: {len(lines)} • Обновляется каждые 2 часа</i>',
             parse_mode=ParseMode.HTML,
