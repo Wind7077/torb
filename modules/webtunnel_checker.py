@@ -33,7 +33,7 @@ async def tor_bootstrap_webtunnel(
 
     torrc = f'''
 UseBridges 1
-ClientTransportPlugin webtunnel exec /usr/bin/webtunnel-client
+ClientTransportPlugin webtunnel exec /usr/bin/webtunnel
 Bridge {bridge_line}
 SocksPort auto
 DataDirectory {temp_dir}
