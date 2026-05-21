@@ -10,12 +10,24 @@ URL_RE = re.compile(r'url=(https://[^ ]+)')
 VER_RE = re.compile(r'ver=(\d+)\.(\d+)\.(\d+)')
 
 
-def version_score(line: str) -> int:
+def get_version(line: str) -> tuple:
     m = VER_RE.search(line)
     if not m:
-        return 0
-    patch = int(m.group(3))
-    return 15 if patch >= 3 else -10
+        return (0, 0, 0)
+    return (int(m.group(1)), int(m.group(2)), int(m.group(3)))
+
+
+def version_score(line: str) -> int:
+    major, minor, patch = get_version(line)
+    if patch >= 3:
+        return 15
+    return -10
+
+
+def is_version_ok(line: str) -> bool:
+    """Пропускаем только ver=0.0.3 и выше."""
+    _, _, patch = get_version(line)
+    return patch >= 3
 
 
 async def _head_once(url: str, timeout: int = 10) -> int | None:
@@ -44,11 +56,15 @@ async def reliable_webtunnel_check(
     retries: int = 2,
     delay: float = 3.0
 ) -> int | None:
-    """HEAD x retries, все должны пройти."""
+    # Отсекаем старые версии сразу — не тратим время на проверку
+    if not is_version_ok(line):
+        return None
+
     m = URL_RE.search(line)
     if not m:
         return None
     url = m.group(1)
+
     results = []
     for _ in range(retries):
         ms = await _head_once(url)
