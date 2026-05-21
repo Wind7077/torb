@@ -6,35 +6,100 @@ import time
 
 SEM_WEBTUNNEL = asyncio.Semaphore(50)
 
-URL_RE = re.compile(r'url=(https://[^ ]+)')
+URL_RE = re.compile(r'url=([^\s]+)')
 VER_RE = re.compile(r'ver=(\d+)\.(\d+)\.(\d+)')
+FP_RE = re.compile(r'\b([A-F0-9]{40})\b', re.I)
 
 
 def version_score(line: str) -> int:
     m = VER_RE.search(line)
+
     if not m:
-        return 0
+        return -20
+
+    major = int(m.group(1))
+    minor = int(m.group(2))
     patch = int(m.group(3))
-    return 15 if patch >= 3 else -10
+
+    # отбрасываем старые webtunnel
+    if (major, minor, patch) <= (0, 0, 1):
+        return -50
+
+    if patch >= 4:
+        return 25
+
+    if patch >= 3:
+        return 15
+
+    return 0
 
 
-async def _head_once(url: str, timeout: int = 10) -> int | None:
+def validate_webtunnel_line(line: str) -> bool:
+
+    if not URL_RE.search(line):
+        return False
+
+    if not FP_RE.search(line):
+        return False
+
+    m = VER_RE.search(line)
+
+    if not m:
+        return False
+
+    version = tuple(map(int, m.groups()))
+
+    # убираем мусорный 0.0.1
+    if version <= (0, 0, 1):
+        return False
+
+    return True
+
+
+async def _probe_webtunnel(url: str, timeout: int = 15) -> int | None:
+
     try:
+
         async with SEM_WEBTUNNEL:
+
             ctx = ssl.create_default_context()
-            ctx.check_hostname = False
-            ctx.verify_mode = ssl.CERT_NONE
-            conn = aiohttp.TCPConnector(ssl=ctx)
+
+            headers = {
+                'User-Agent': 'Mozilla/5.0',
+                'Upgrade': 'websocket',
+                'Connection': 'Upgrade',
+            }
+
+            connector = aiohttp.TCPConnector(
+                ssl=ctx,
+                force_close=True,
+            )
+
             start = time.perf_counter()
-            async with aiohttp.ClientSession(connector=conn) as s:
-                async with s.head(
+
+            async with aiohttp.ClientSession(
+                connector=connector,
+                headers=headers
+            ) as s:
+
+                async with s.get(
                     url,
                     timeout=aiohttp.ClientTimeout(total=timeout),
                     allow_redirects=True
                 ) as resp:
-                    if resp.status >= 500:
+
+                    # endpoint мертв
+                    if resp.status >= 400:
                         return None
-                    return round((time.perf_counter() - start) * 1000)
+
+                    # webtunnel без h2 часто мусор
+                    if resp.version.major < 2:
+                        return None
+
+                    return round(
+                        (time.perf_counter() - start) * 1000
+                    )
+
     except:
         return None
 
@@ -42,18 +107,30 @@ async def _head_once(url: str, timeout: int = 10) -> int | None:
 async def reliable_webtunnel_check(
     line: str,
     retries: int = 2,
-    delay: float = 3.0
+    delay: float = 2.0
 ) -> int | None:
-    """HEAD x retries, все должны пройти."""
+
+    if not validate_webtunnel_line(line):
+        return None
+
     m = URL_RE.search(line)
+
     if not m:
         return None
+
     url = m.group(1)
+
     results = []
+
     for _ in range(retries):
-        ms = await _head_once(url)
+
+        ms = await _probe_webtunnel(url)
+
         if ms is None:
             return None
+
         results.append(ms)
+
         await asyncio.sleep(delay)
+
     return round(sum(results) / len(results))
