@@ -22,17 +22,28 @@ jobs:
       - name: Install system packages
         run: |
           sudo apt update
+
           sudo apt install -y \
             tor \
             golang-go \
-            git
+            wget \
+            unzip
+
+      - name: Download webtunnel source
+        run: |
+          wget -O webtunnel.zip \
+            https://github.com/tn3w/webtunnel/archive/refs/heads/main.zip
+
+          unzip webtunnel.zip
 
       - name: Build webtunnel-client
         run: |
-          git clone https://github.com/tn3w/webtunnel.git
-          cd webtunnel/client
+          cd webtunnel-main/client
+
           go build -o webtunnel-client
+
           sudo mv webtunnel-client /usr/bin/webtunnel-client
+
           sudo chmod +x /usr/bin/webtunnel-client
 
       - name: Install Python deps
@@ -46,10 +57,13 @@ jobs:
       - name: Commit output
         run: |
           git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git config user.email \
+            "github-actions[bot]@users.noreply.github.com"
 
           git add output/
 
-          git commit -m "update bridges" || echo "nothing to commit"
+          git commit -m "update bridges" \
+            || echo "nothing to commit"
 
           git push
