@@ -29,7 +29,7 @@ jobs:
 
       - name: Build webtunnel-client
         run: |
-          git clone https://github.com/torproject/webtunnel.git
+          git clone https://github.com/tn3w/webtunnel.git
           cd webtunnel/client
           go build -o webtunnel-client
           sudo mv webtunnel-client /usr/bin/webtunnel-client
