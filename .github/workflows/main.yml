@@ -25,13 +25,13 @@ jobs:
 
           sudo apt install -y \
             tor \
-            webtunnel \
+            lyrebird \
             python3-pip
 
-      - name: Check webtunnel install
+      - name: Check installs
         run: |
-          which webtunnel-client || true
-          which webtunnel || true
+          which tor
+          which lyrebird
 
       - name: Install Python deps
         run: |
