@@ -34,7 +34,7 @@ def update_entry(history: dict, fp: str, latency: int) -> dict:
     return history
 
 
-def history_score(history: dict, fp: str) -> int:
+def history_score(history: dict, fp: str, transport: str = 'obfs4') -> int:
     if fp not in history:
         return -10  # новый — не доверяем
 
@@ -42,16 +42,16 @@ def history_score(history: dict, fp: str) -> int:
     seen = entry['seen']
     avg_lat = entry['avg_latency']
 
-    # хронически медленный (3+ проверок и всегда > 600мс) — штраф
-    if seen >= 3 and avg_lat > 600:
+    # порог медлительности зависит от типа:
+    # webtunnel физически медленнее из-за HTTP+TLS overhead
+    slow_threshold = 1200 if transport == 'webtunnel' else 600
+
+    # хронически медленный (3+ проверок) — штраф
+    if seen >= 3 and avg_lat > slow_threshold:
         return -20
 
-    if seen >= 10:
-        return 30
-    if seen >= 5:
-        return 20
-    if seen >= 3:
-        return 10
-    if seen >= 1:
-        return 0
+    if seen >= 10: return 30
+    if seen >= 5:  return 20
+    if seen >= 3:  return 10
+    if seen >= 1:  return 0
     return -10
