@@ -8,7 +8,13 @@ HISTORY_FILE = Path('bridges_history.json')
 def load_history() -> dict:
     if HISTORY_FILE.exists():
         try:
-            return json.loads(HISTORY_FILE.read_text(encoding='utf-8'))
+            h = json.loads(HISTORY_FILE.read_text(encoding='utf-8'))
+            # Убираем мусорные записи: seen<=2 и lat>400 — webtunnel до фикса версий
+            cleaned = {fp: v for fp, v in h.items()
+                       if not (v['seen'] <= 2 and v['avg_latency'] > 400)}
+            if len(cleaned) < len(h):
+                print(f'[INFO] очищено из истории: {len(h) - len(cleaned)} мусорных записей')
+            return cleaned
         except:
             return {}
     return {}
@@ -42,8 +48,7 @@ def history_score(history: dict, fp: str, transport: str = 'obfs4') -> int:
     seen = entry['seen']
     avg_lat = entry['avg_latency']
 
-    # порог медлительности зависит от типа:
-    # webtunnel физически медленнее из-за HTTP+TLS overhead
+    # порог медлительности зависит от типа
     slow_threshold = 1200 if transport == 'webtunnel' else 600
 
     # хронически медленный (3+ проверок) — штраф
