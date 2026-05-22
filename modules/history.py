@@ -9,9 +9,12 @@ def load_history() -> dict:
     if HISTORY_FILE.exists():
         try:
             h = json.loads(HISTORY_FILE.read_text(encoding='utf-8'))
-            # Убираем мусорные записи: seen<=2 и lat>400 — webtunnel до фикса версий
+            # Убираем мусор двух типов:
+            # 1. seen<=2 и lat>400 — webtunnel до фикса версий
+            # 2. seen>=3 и lat>1200 — безнадёжно медленные
             cleaned = {fp: v for fp, v in h.items()
-                       if not (v['seen'] <= 2 and v['avg_latency'] > 400)}
+                       if not (v['seen'] <= 2 and v['avg_latency'] > 400)
+                       and not (v['seen'] >= 3 and v['avg_latency'] > 1200)}
             if len(cleaned) < len(h):
                 print(f'[INFO] очищено из истории: {len(h) - len(cleaned)} мусорных записей')
             return cleaned
@@ -48,7 +51,8 @@ def history_score(history: dict, fp: str, transport: str = 'obfs4') -> int:
     seen = entry['seen']
     avg_lat = entry['avg_latency']
 
-    # порог медлительности зависит от типа
+    # порог медлительности зависит от типа:
+    # webtunnel физически медленнее из-за HTTP+TLS overhead
     slow_threshold = 1200 if transport == 'webtunnel' else 600
 
     # хронически медленный (3+ проверок) — штраф
