@@ -1,5 +1,5 @@
 import json
-from datetime import date, timedelta
+from datetime import date
 from pathlib import Path
 
 HISTORY_FILE = Path('bridges_history.json')
@@ -12,12 +12,14 @@ def load_history() -> dict:
     if HISTORY_FILE.exists():
         try:
             h = json.loads(HISTORY_FILE.read_text(encoding='utf-8'))
-            # Убираем мусор двух типов:
+            # Убираем мусор трёх типов:
             # 1. seen<=2 и lat>400 — webtunnel до фикса версий
             # 2. seen>=3 и lat>1200 — безнадёжно медленные
+            # 3. seen>=10 и lat>800 — стабильно присутствуют но хронически медленные
             cleaned = {fp: v for fp, v in h.items()
                        if not (v['seen'] <= 2 and v['avg_latency'] > 400)
-                       and not (v['seen'] >= 3 and v['avg_latency'] > 1200)}
+                       and not (v['seen'] >= 3 and v['avg_latency'] > 1200)
+                       and not (v['seen'] >= 10 and v['avg_latency'] > 800)}
             if len(cleaned) < len(h):
                 print(f'[INFO] очищено из истории: {len(h) - len(cleaned)} мусорных записей')
             return cleaned
@@ -74,11 +76,11 @@ def history_score(history: dict, fp: str, transport: str = 'obfs4') -> int:
     try:
         days_ago = (date.today() - date.fromisoformat(last_seen)).days
         if days_ago > 14:
-            score = max(score - 20, -10)  # давно пропал — сильный штраф
+            score = max(score - 20, -10)
         elif days_ago > 7:
-            score = max(score - 15, -10)  # неделю не виден — умеренный штраф
+            score = max(score - 15, -10)
         elif days_ago > 3:
-            score = max(score - 5, -10)   # пару дней не виден — лёгкий штраф
+            score = max(score - 5, -10)
     except ValueError:
         pass
 
