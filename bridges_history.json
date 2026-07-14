@@ -1,37 +1,37 @@
 {
   "961584DCD240BB47A7BCED1EDE3E847DB1627C47": {
     "seen": 50,
-    "avg_latency": 214,
+    "avg_latency": 199,
     "last_seen": "2026-07-14"
   },
   "9651407CCA02D88F007BAB8C623E31F3F88F69DF": {
     "seen": 50,
-    "avg_latency": 251,
+    "avg_latency": 238,
     "last_seen": "2026-07-14"
   },
   "FAEB453BA8960CEA9FCE896E51A9DD40ED2A298D": {
     "seen": 50,
-    "avg_latency": 103,
+    "avg_latency": 120,
     "last_seen": "2026-07-14"
   },
   "42C5E354B0B9028667CFAB9705298F8C3623A4FB": {
     "seen": 50,
-    "avg_latency": 251,
+    "avg_latency": 282,
     "last_seen": "2026-07-14"
   },
   "CEF423251E83353BD875CB5327B458F4C8751170": {
     "seen": 50,
-    "avg_latency": 202,
+    "avg_latency": 214,
     "last_seen": "2026-07-14"
   },
   "1E46AF4CAA13DB811D71267CF519321EE6C5D0FE": {
     "seen": 50,
-    "avg_latency": 100,
+    "avg_latency": 104,
     "last_seen": "2026-07-14"
   },
   "98F97C9242C2539A7219AD85696B51AD907823A8": {
     "seen": 50,
-    "avg_latency": 224,
+    "avg_latency": 206,
     "last_seen": "2026-07-14"
   },
   "5074CD00F003E67CE33D0F1E75C09714FEB9F157": {
@@ -46,17 +46,17 @@
   },
   "5E07802E4E16519993534E00CE31B8E6657179EB": {
     "seen": 50,
-    "avg_latency": 105,
+    "avg_latency": 120,
     "last_seen": "2026-07-14"
   },
   "B2CF8191825381A63ADC2F62D667D028C1BD9749": {
     "seen": 50,
-    "avg_latency": 171,
+    "avg_latency": 158,
     "last_seen": "2026-07-14"
   },
   "D710A86E8AAE84737FCBBCB2CF0A7903583941CA": {
     "seen": 50,
-    "avg_latency": 177,
+    "avg_latency": 186,
     "last_seen": "2026-07-14"
   },
   "000918FA6CE9558233E713FA77CE49A4BCA4A637": {
@@ -71,12 +71,12 @@
   },
   "525ABD39D207984F6FB14F3EF056F11E4A9B5903": {
     "seen": 50,
-    "avg_latency": 350,
+    "avg_latency": 313,
     "last_seen": "2026-07-14"
   },
   "E4164FC68FDB95DBF5465737BA80086868BFB795": {
     "seen": 50,
-    "avg_latency": 234,
+    "avg_latency": 297,
     "last_seen": "2026-07-14"
   },
   "D9F4190115B6DB5461E101A7A2E20F213F9BBA42": {
@@ -86,47 +86,47 @@
   },
   "0F1F4A2FE37BBC986462779BA2F837FA104C667D": {
     "seen": 50,
-    "avg_latency": 280,
+    "avg_latency": 268,
     "last_seen": "2026-07-14"
   },
   "CDC14F4A2E982E1EDFE5DEB21060E34DCB1F2476": {
     "seen": 50,
-    "avg_latency": 227,
+    "avg_latency": 230,
     "last_seen": "2026-07-14"
   },
   "1C8C33FEAC90952D54DF08726857FFCB9E47A6EB": {
     "seen": 50,
-    "avg_latency": 428,
+    "avg_latency": 365,
     "last_seen": "2026-07-14"
   },
   "85B406A2834B0CF5A0B756D1EFA86E8217D86F8C": {
     "seen": 50,
-    "avg_latency": 236,
+    "avg_latency": 238,
     "last_seen": "2026-07-14"
   },
   "AAB7DAE2F38A907951899A53A3EE781D180D8CAB": {
     "seen": 50,
-    "avg_latency": 273,
+    "avg_latency": 356,
     "last_seen": "2026-07-14"
   },
   "6580023D474DD3C06920027530C3B5E39B89DC03": {
     "seen": 50,
-    "avg_latency": 289,
+    "avg_latency": 274,
     "last_seen": "2026-07-14"
   },
   "03D09C94EC7C562070C54D6D2D58E39996FDE3FD": {
     "seen": 50,
-    "avg_latency": 184,
+    "avg_latency": 293,
     "last_seen": "2026-07-14"
   },
   "CE9FB471CD33ADFD45D1851E3FB3B6E8B8C8F0CD": {
     "seen": 50,
-    "avg_latency": 295,
+    "avg_latency": 264,
     "last_seen": "2026-07-14"
   },
   "A722DD8AA950F7C648C07E14B52247D09EAF615E": {
     "seen": 50,
-    "avg_latency": 205,
+    "avg_latency": 163,
     "last_seen": "2026-07-14"
   },
   "4F4571C3E0FD8D23C0C0AF76D63F7A5B08199A86": {
@@ -136,7 +136,7 @@
   },
   "2DF354DFB45E818F3437B525A312166ACE94D2F0": {
     "seen": 50,
-    "avg_latency": 311,
+    "avg_latency": 260,
     "last_seen": "2026-07-14"
   },
   "431754E186B63185B0743D5E65AD0D15AA3F1C36": {
@@ -146,12 +146,12 @@
   },
   "55F1484A014C38077D92B3BF73A818D034637557": {
     "seen": 50,
-    "avg_latency": 203,
+    "avg_latency": 254,
     "last_seen": "2026-07-14"
   },
   "5B5F87EFACAEF3ED0AACFDE6B9301C8CBCFEE520": {
     "seen": 50,
-    "avg_latency": 299,
+    "avg_latency": 281,
     "last_seen": "2026-07-14"
   },
   "57C218E285D2AA1E7077859761421E9C62B9123E": {
@@ -161,12 +161,12 @@
   },
   "2A388BF677CC4914FBBEC28ED62F4DA7B5AA9B07": {
     "seen": 50,
-    "avg_latency": 235,
+    "avg_latency": 212,
     "last_seen": "2026-07-14"
   },
   "2B2F89D522FB81758453A5DF9D30B330A706647B": {
     "seen": 50,
-    "avg_latency": 276,
+    "avg_latency": 264,
     "last_seen": "2026-07-14"
   },
   "331E4A6F82F30403F709FC937E06D0930A136616": {
@@ -181,32 +181,32 @@
   },
   "9EB9BC2C884D4ABEEFA2C5FDE172BA4CDC5151B7": {
     "seen": 50,
-    "avg_latency": 253,
+    "avg_latency": 222,
     "last_seen": "2026-07-14"
   },
   "B8DFC8F455000A5C6C740175A6604642CB50A83D": {
     "seen": 50,
-    "avg_latency": 219,
+    "avg_latency": 206,
     "last_seen": "2026-07-14"
   },
   "078DCEA421F8364866C1C98F6BA9670232A8462A": {
     "seen": 50,
-    "avg_latency": 280,
+    "avg_latency": 309,
     "last_seen": "2026-07-14"
   },
   "FB71C464B21E538105E873A379F0B791B10D439C": {
     "seen": 50,
-    "avg_latency": 173,
+    "avg_latency": 174,
     "last_seen": "2026-07-14"
   },
   "6574D4D903FDE714F2759A3B3C31C0363A92DCDC": {
     "seen": 50,
-    "avg_latency": 260,
+    "avg_latency": 244,
     "last_seen": "2026-07-14"
   },
   "CDA13CF52FFF3A70AEFB3A793B16DC2A63406531": {
     "seen": 50,
-    "avg_latency": 194,
+    "avg_latency": 196,
     "last_seen": "2026-07-14"
   },
   "EF7BEF14C168EE54BB109779B70C9DACB00ED649": {
@@ -216,12 +216,12 @@
   },
   "3DF77E92AF70F850699DEE8BC84899D1F3ECC34E": {
     "seen": 50,
-    "avg_latency": 204,
+    "avg_latency": 271,
     "last_seen": "2026-07-14"
   },
   "67166AAD29775E00A5578F4AC1DB91C8717233B9": {
     "seen": 50,
-    "avg_latency": 255,
+    "avg_latency": 251,
     "last_seen": "2026-07-14"
   },
   "E9660A202B0D49571409987D317D0C3CD94DAAC3": {
@@ -231,27 +231,27 @@
   },
   "1E1011E5A7BBAA0FE974454228A682295B77F1C1": {
     "seen": 50,
-    "avg_latency": 316,
+    "avg_latency": 264,
     "last_seen": "2026-07-14"
   },
   "A0A4E85A13F568B6D5BC6C8FFCCF53822DC0950E": {
     "seen": 50,
-    "avg_latency": 270,
+    "avg_latency": 241,
     "last_seen": "2026-07-14"
   },
   "2BBFF9577FF2671B7C0698C6A4E286423FB21AE8": {
     "seen": 50,
-    "avg_latency": 192,
+    "avg_latency": 169,
     "last_seen": "2026-07-14"
   },
   "9D542D1BCF5994FF21ED379AA68DD691F305E03C": {
     "seen": 50,
-    "avg_latency": 127,
+    "avg_latency": 156,
     "last_seen": "2026-07-14"
   },
   "4FB781F7A9DD39DA53A7996907817FC479874D19": {
     "seen": 50,
-    "avg_latency": 289,
+    "avg_latency": 330,
     "last_seen": "2026-07-14"
   },
   "C6FB0A934DFA8CC6F9F4A9FF8C114EEA1F876FA0": {
@@ -261,12 +261,12 @@
   },
   "8C51BB761FF9D89B09A3670892E84019D60D7210": {
     "seen": 50,
-    "avg_latency": 308,
+    "avg_latency": 264,
     "last_seen": "2026-07-14"
   },
   "AFEA7AA741841104DD4B05BB40EB429D9D9984D3": {
     "seen": 50,
-    "avg_latency": 594,
+    "avg_latency": 601,
     "last_seen": "2026-07-14"
   },
   "C9963C4565F455119BF45006236DF894ADD2DFD9": {
@@ -281,17 +281,17 @@
   },
   "E6F41C41485C503D3E8A2D4C9B096B390F9425B7": {
     "seen": 50,
-    "avg_latency": 281,
+    "avg_latency": 284,
     "last_seen": "2026-07-14"
   },
   "7C7A8518809B6B5EAFC31AEB7E477D3DB68BC5DD": {
     "seen": 50,
-    "avg_latency": 292,
+    "avg_latency": 261,
     "last_seen": "2026-07-14"
   },
   "6D1780FF3CD756D2047A8E0C73F39D80B5343CD6": {
     "seen": 50,
-    "avg_latency": 199,
+    "avg_latency": 212,
     "last_seen": "2026-07-14"
   },
   "393CB43A5ED55A36D4F206A67B2249F5EFF83CC1": {
@@ -306,12 +306,12 @@
   },
   "9A5140B2C5EC60C96195E8152E5BF56954F42A3F": {
     "seen": 50,
-    "avg_latency": 178,
+    "avg_latency": 215,
     "last_seen": "2026-07-14"
   },
   "94E00B732E8D01E4146F61AF761F8DA23F3BE0DA": {
     "seen": 50,
-    "avg_latency": 287,
+    "avg_latency": 214,
     "last_seen": "2026-07-14"
   },
   "6613F66DC1AE0B50281CB8364654B85FB1253A36": {
@@ -321,22 +321,22 @@
   },
   "6E26C7CC5852E8D13F7865D912ADC412EAA393DA": {
     "seen": 50,
-    "avg_latency": 118,
+    "avg_latency": 128,
     "last_seen": "2026-07-14"
   },
   "AD26290480151BAA4A8F695C11BD7B141284B691": {
     "seen": 50,
-    "avg_latency": 234,
+    "avg_latency": 213,
     "last_seen": "2026-07-14"
   },
   "15B2D5D8A6005635751CF0B9F24B6A9ECC8728C3": {
     "seen": 50,
-    "avg_latency": 241,
+    "avg_latency": 251,
     "last_seen": "2026-07-14"
   },
   "E71628480D83354D3AC73BC4F1B1684F1E7BC57B": {
     "seen": 50,
-    "avg_latency": 338,
+    "avg_latency": 309,
     "last_seen": "2026-07-14"
   },
   "DDC2D71C118646552567760E50B83F83BD012FE6": {
@@ -346,32 +346,32 @@
   },
   "E39E2A16023AC199A1927B0F86008FBE51C02058": {
     "seen": 50,
-    "avg_latency": 266,
+    "avg_latency": 332,
     "last_seen": "2026-07-14"
   },
   "2CC3655B4CE0DC10FD8E67457D8F7A0F2FEFDAC0": {
     "seen": 50,
-    "avg_latency": 105,
+    "avg_latency": 102,
     "last_seen": "2026-07-14"
   },
   "135C158527AA9FE9A2F26EC515EB6999D813D347": {
     "seen": 50,
-    "avg_latency": 272,
+    "avg_latency": 258,
     "last_seen": "2026-07-14"
   },
   "3B9C9D44AD2FB54D9F6DA20FF5FED8AA02EBB7DF": {
     "seen": 50,
-    "avg_latency": 120,
+    "avg_latency": 111,
     "last_seen": "2026-07-14"
   },
   "E57C2F015ED863E81C400BA9A980EB0689C56E41": {
     "seen": 50,
-    "avg_latency": 231,
+    "avg_latency": 204,
     "last_seen": "2026-07-14"
   },
   "972A60902543FDD9BC3BF76A795DC009F65427F3": {
     "seen": 50,
-    "avg_latency": 123,
+    "avg_latency": 135,
     "last_seen": "2026-07-14"
   },
   "D8E175BFD463247E4B0ADE108F269A8B2C0CD46F": {
@@ -386,12 +386,12 @@
   },
   "07D619A6011501CC892FAA78D182F0B20C826145": {
     "seen": 50,
-    "avg_latency": 224,
+    "avg_latency": 215,
     "last_seen": "2026-07-14"
   },
   "4EBA78385FCA62C8A26EDEEC6752068C676287F3": {
     "seen": 50,
-    "avg_latency": 327,
+    "avg_latency": 282,
     "last_seen": "2026-07-14"
   },
   "986E06A61EC62DC0DD58E0A1BB6EE54463EF408A": {
@@ -411,47 +411,47 @@
   },
   "F6E3C527581A0C83750E5A1794F5A223A148520F": {
     "seen": 50,
-    "avg_latency": 239,
+    "avg_latency": 210,
     "last_seen": "2026-07-14"
   },
   "E811AABF01E9EA98D2394A5F2BCA4B0ADBB5E6B5": {
     "seen": 50,
-    "avg_latency": 251,
+    "avg_latency": 259,
     "last_seen": "2026-07-14"
   },
   "E6AD2168F7A0E18F82F0DEDCD1D3C28A9F67AD16": {
     "seen": 50,
-    "avg_latency": 315,
+    "avg_latency": 267,
     "last_seen": "2026-07-14"
   },
   "49A53936AF2895A1612603AAA3C1CF8A01830157": {
     "seen": 50,
-    "avg_latency": 93,
+    "avg_latency": 85,
     "last_seen": "2026-07-14"
   },
   "36DFA37BA79F31094E2CDC8BA8F8498249D921FF": {
     "seen": 50,
-    "avg_latency": 296,
+    "avg_latency": 279,
     "last_seen": "2026-07-14"
   },
   "29DFC8F13FCD981ED3C2FF7F326F4354517E7C33": {
     "seen": 50,
-    "avg_latency": 188,
+    "avg_latency": 178,
     "last_seen": "2026-07-14"
   },
   "ECE75DDAC9C66BCFB92F43AE99CD0B734D1B3B18": {
     "seen": 50,
-    "avg_latency": 124,
+    "avg_latency": 105,
     "last_seen": "2026-07-14"
   },
   "C3E835DD48EE4F0E658DC777213ABC299C2CF25E": {
     "seen": 50,
-    "avg_latency": 372,
+    "avg_latency": 306,
     "last_seen": "2026-07-14"
   },
   "4E08190BD91F309DD41CF5D6BE2AFFFF298C8A9F": {
     "seen": 50,
-    "avg_latency": 247,
+    "avg_latency": 242,
     "last_seen": "2026-07-14"
   },
   "02E4E04C425EA273FE248E432758F8370101F1DB": {
@@ -466,7 +466,7 @@
   },
   "98422E9D1648FFDB8F16C06CF58CD64B6C03A003": {
     "seen": 50,
-    "avg_latency": 150,
+    "avg_latency": 261,
     "last_seen": "2026-07-14"
   },
   "04E4EBA0A303E580FE36C4667A15676C74A50428": {
@@ -481,27 +481,27 @@
   },
   "C5157FBA3D75DC77E7EF14E0A8C1D6869384EFCD": {
     "seen": 50,
-    "avg_latency": 261,
+    "avg_latency": 316,
     "last_seen": "2026-07-14"
   },
   "B45AE22E362A8824BEC7463F2AF97B2D4DFB4803": {
     "seen": 50,
-    "avg_latency": 207,
+    "avg_latency": 189,
     "last_seen": "2026-07-14"
   },
   "1B6CB332A1954FDF740DE75E8AFAEB41469D5821": {
     "seen": 50,
-    "avg_latency": 118,
+    "avg_latency": 93,
     "last_seen": "2026-07-14"
   },
   "5502458248AA2F6A93E614E5DCD92212F60189BA": {
     "seen": 50,
-    "avg_latency": 234,
+    "avg_latency": 297,
     "last_seen": "2026-07-14"
   },
   "8EBD184BFCCADD5BA8EE745E21DA7907CBBD5773": {
     "seen": 50,
-    "avg_latency": 134,
+    "avg_latency": 178,
     "last_seen": "2026-07-14"
   },
   "3A067B60FE339BAABD94040286FA393F4926E146": {
@@ -516,77 +516,77 @@
   },
   "DD598CF8769B5047B2D51B424B08EF587E53D484": {
     "seen": 50,
-    "avg_latency": 192,
+    "avg_latency": 218,
     "last_seen": "2026-07-14"
   },
   "80528B51B0E9BE6D645E535BF5CEFD297FF554A4": {
     "seen": 50,
-    "avg_latency": 174,
+    "avg_latency": 164,
     "last_seen": "2026-07-14"
   },
   "792B1F49416C1084E14CC6996936ECA159616E6B": {
     "seen": 50,
-    "avg_latency": 173,
+    "avg_latency": 252,
     "last_seen": "2026-07-14"
   },
   "A2F8B75AB6C27CB335886BCB6603D4AD4804D5A6": {
     "seen": 50,
-    "avg_latency": 243,
+    "avg_latency": 208,
     "last_seen": "2026-07-14"
   },
   "95186700BC86C8032E4E707448861FBE39564FB2": {
     "seen": 50,
-    "avg_latency": 274,
+    "avg_latency": 209,
     "last_seen": "2026-07-14"
   },
   "EB5CA7581B2556175B0774193475F71354BD78F7": {
     "seen": 50,
-    "avg_latency": 294,
+    "avg_latency": 349,
     "last_seen": "2026-07-14"
   },
   "E9C543DB938396539A332D3E9067448AA99E11BD": {
     "seen": 50,
-    "avg_latency": 376,
+    "avg_latency": 349,
     "last_seen": "2026-07-14"
   },
   "835267075E2F596729AEEFE6CA858FCD3058D702": {
     "seen": 50,
-    "avg_latency": 225,
+    "avg_latency": 272,
     "last_seen": "2026-07-14"
   },
   "2582C1451932CEC25E225F3D52472ED70F7EC9F0": {
     "seen": 50,
-    "avg_latency": 384,
+    "avg_latency": 408,
     "last_seen": "2026-07-14"
   },
   "DA599416435D6D16A3A3B0B8CC8A51FB9E45DE08": {
     "seen": 50,
-    "avg_latency": 268,
+    "avg_latency": 289,
     "last_seen": "2026-07-14"
   },
   "207A70CBB17D166CE58DBCEC4B02862BA15BF5CF": {
     "seen": 50,
-    "avg_latency": 289,
+    "avg_latency": 259,
     "last_seen": "2026-07-14"
   },
   "E315A7F8A5E2C1B4819D09D79C5A627D65C182AB": {
     "seen": 50,
-    "avg_latency": 318,
+    "avg_latency": 257,
     "last_seen": "2026-07-14"
   },
   "418136C9E3F7C8E1A2A60A618D36AE35B99CAF04": {
     "seen": 50,
-    "avg_latency": 241,
+    "avg_latency": 270,
     "last_seen": "2026-07-14"
   },
   "BAD84D23DBBB9A2D212665CFE73F08C8857950BD": {
     "seen": 50,
-    "avg_latency": 198,
+    "avg_latency": 199,
     "last_seen": "2026-07-14"
   },
   "6257348EE1BF9582EAAE60E3C0A9F1EE1D1AAAFC": {
     "seen": 50,
-    "avg_latency": 139,
+    "avg_latency": 115,
     "last_seen": "2026-07-14"
   },
   "B64C5A360D530633CB2D8DEC5D19CA35C4360C93": {
@@ -596,7 +596,7 @@
   },
   "D200BD372F929D1AB9E9242B5A17C776C2E0047D": {
     "seen": 50,
-    "avg_latency": 248,
+    "avg_latency": 261,
     "last_seen": "2026-07-14"
   },
   "B51FD3150E208A600D00BCA5963B0EF5C867574F": {
@@ -606,7 +606,7 @@
   },
   "E38A5D2B932EF8AD559E9DBE1AD8327CDD7046C6": {
     "seen": 50,
-    "avg_latency": 259,
+    "avg_latency": 226,
     "last_seen": "2026-07-14"
   },
   "EF558445B40DC79135DBDFD53C9434DDE7F2153D": {
@@ -616,12 +616,12 @@
   },
   "6D2D3085530BCAFAF51F1AD20A7CE43E21F276C7": {
     "seen": 50,
-    "avg_latency": 252,
+    "avg_latency": 244,
     "last_seen": "2026-07-14"
   },
   "80BD5CE2FC5688C7B39DB8F115A3C90CA1D72364": {
     "seen": 50,
-    "avg_latency": 363,
+    "avg_latency": 336,
     "last_seen": "2026-07-14"
   },
   "84DE70C3735D1F2D3D8142AAAD785521750310D2": {
@@ -631,27 +631,27 @@
   },
   "69C561AD06751D0E1E400341DEDAA2269674DA0F": {
     "seen": 50,
-    "avg_latency": 215,
+    "avg_latency": 245,
     "last_seen": "2026-07-14"
   },
   "CA608568A02BFEE1DB09D1A08F25D2D2CC11B07B": {
     "seen": 50,
-    "avg_latency": 335,
+    "avg_latency": 331,
     "last_seen": "2026-07-14"
   },
   "6705A703015B05CAD535D7CEE4D82581B7BDBA0A": {
     "seen": 50,
-    "avg_latency": 239,
+    "avg_latency": 214,
     "last_seen": "2026-07-14"
   },
   "85794367DBECF3B3933312C6E0641AA344FA0651": {
     "seen": 50,
-    "avg_latency": 335,
+    "avg_latency": 290,
     "last_seen": "2026-07-14"
   },
   "3BBD31625DF09D6360C8DF2CF482C8CCA3F46577": {
     "seen": 50,
-    "avg_latency": 256,
+    "avg_latency": 267,
     "last_seen": "2026-07-14"
   },
   "416D9DF18C061452ABF88871272B72BE37DF0ED4": {
@@ -661,22 +661,22 @@
   },
   "7B2DD5DB0086CD70F2A706EBD72E109F2F96183F": {
     "seen": 50,
-    "avg_latency": 249,
+    "avg_latency": 286,
     "last_seen": "2026-07-14"
   },
   "98275F666091EC734EA052FFEC8BA859FAB416C3": {
     "seen": 50,
-    "avg_latency": 245,
+    "avg_latency": 190,
     "last_seen": "2026-07-14"
   },
   "487051F8352D0EB4D0277A4682694AF7A745D344": {
     "seen": 50,
-    "avg_latency": 353,
+    "avg_latency": 291,
     "last_seen": "2026-07-14"
   },
   "BD58EA6DF0208B9BD1CA699EF1ADD8C670FDFE0E": {
     "seen": 50,
-    "avg_latency": 184,
+    "avg_latency": 205,
     "last_seen": "2026-07-14"
   },
   "873734BBA08CFA2C0E9DBBA67E85D221B4E38350": {
@@ -691,17 +691,17 @@
   },
   "8F219F64DC11351F00C3A50B64990EE50E784F74": {
     "seen": 50,
-    "avg_latency": 250,
+    "avg_latency": 190,
     "last_seen": "2026-07-14"
   },
   "E15FB70EF1A4C46AB3901475FF2CD239813531D4": {
     "seen": 50,
-    "avg_latency": 243,
+    "avg_latency": 230,
     "last_seen": "2026-07-14"
   },
   "EABAC676BC1826280249FAFB13A3C08002315D3D": {
     "seen": 50,
-    "avg_latency": 326,
+    "avg_latency": 270,
     "last_seen": "2026-07-14"
   },
   "B08238781C2CD80DBD95AEABEB6F6C75F2E2CEB6": {
@@ -716,17 +716,17 @@
   },
   "F3FA0D45D35E987484848345F8D92AB1D883889B": {
     "seen": 50,
-    "avg_latency": 194,
+    "avg_latency": 208,
     "last_seen": "2026-07-14"
   },
   "951F1D53D204FC810BBB53E22A43B9A3EF908026": {
     "seen": 50,
-    "avg_latency": 333,
+    "avg_latency": 303,
     "last_seen": "2026-07-14"
   },
   "BCD4F4B69D3920ACFCDBAB2BA2F85509911DBBE8": {
     "seen": 50,
-    "avg_latency": 197,
+    "avg_latency": 210,
     "last_seen": "2026-07-14"
   },
   "6C8264BD4C03CC2FAC80B7C73D2D76D44AB5BB96": {
@@ -741,7 +741,7 @@
   },
   "503EB70C30120C72988B47087C720B582B6AB135": {
     "seen": 50,
-    "avg_latency": 223,
+    "avg_latency": 221,
     "last_seen": "2026-07-14"
   },
   "620FF69837BE09245991B3FAE73E0C89D6F4D1CC": {
@@ -756,22 +756,22 @@
   },
   "53716FE26F23C8C6A71A2BC5D9D8DC64747278C7": {
     "seen": 50,
-    "avg_latency": 191,
+    "avg_latency": 179,
     "last_seen": "2026-07-14"
   },
   "13DDD2BED74D068AFF3EEE2B9D13C4E4D4667DDA": {
     "seen": 50,
-    "avg_latency": 268,
+    "avg_latency": 233,
     "last_seen": "2026-07-14"
   },
   "E8B019E3CC615E566AE6CE56DACC80A97A50CF12": {
     "seen": 50,
-    "avg_latency": 184,
+    "avg_latency": 213,
     "last_seen": "2026-07-14"
   },
   "49FDC1FDD351324A3D51F8E269498C72D1CCF101": {
     "seen": 50,
-    "avg_latency": 270,
+    "avg_latency": 239,
     "last_seen": "2026-07-14"
   },
   "67688FAA23CABB100DB6D259416A47F08B09C0CF": {
@@ -781,22 +781,22 @@
   },
   "390FE30FB48637087436C4D36DA769C68BDEBD6C": {
     "seen": 50,
-    "avg_latency": 252,
+    "avg_latency": 222,
     "last_seen": "2026-07-14"
   },
   "8545E750001414D1C03307D21BACA22323ECA7D3": {
     "seen": 50,
-    "avg_latency": 217,
+    "avg_latency": 265,
     "last_seen": "2026-07-14"
   },
   "4F53709C4A798A66646E4F5BBDD9D1612F098274": {
     "seen": 50,
-    "avg_latency": 220,
+    "avg_latency": 216,
     "last_seen": "2026-07-14"
   },
   "C1FFD364E11928D9C84ECF76987693CF58355749": {
     "seen": 50,
-    "avg_latency": 196,
+    "avg_latency": 182,
     "last_seen": "2026-07-14"
   },
   "EB1331E3372F12A1B42D2A8ECAF7064251C56B66": {
@@ -806,17 +806,17 @@
   },
   "B8D14171E82FFC3FB37BEEF3FCDBE3C17626472A": {
     "seen": 50,
-    "avg_latency": 130,
+    "avg_latency": 124,
     "last_seen": "2026-07-14"
   },
   "9486E39394190EEF4774F5063F394F8125A02941": {
     "seen": 50,
-    "avg_latency": 260,
+    "avg_latency": 198,
     "last_seen": "2026-07-14"
   },
   "0DBB397ADC4F8A16C09331EC337197531899ED74": {
     "seen": 50,
-    "avg_latency": 211,
+    "avg_latency": 196,
     "last_seen": "2026-07-14"
   },
   "35E578145C68067D4E45DED53381F0985FDF66EC": {
@@ -826,7 +826,7 @@
   },
   "F80C186BBDDDDC1DF6ECD8D654025590B187BF4E": {
     "seen": 50,
-    "avg_latency": 201,
+    "avg_latency": 227,
     "last_seen": "2026-07-14"
   },
   "56A3F579D7F0285F66BE813BE2ED3665DC5152DC": {
@@ -836,7 +836,7 @@
   },
   "83116A2B259730C25507E08D06D2212E7740CE70": {
     "seen": 50,
-    "avg_latency": 208,
+    "avg_latency": 232,
     "last_seen": "2026-07-14"
   },
   "06110A085F7CD3821836DA2CA94C23F667AF8FDE": {
@@ -851,12 +851,12 @@
   },
   "60B022F2684541E65B9C17FE7D78372D40564E99": {
     "seen": 50,
-    "avg_latency": 261,
+    "avg_latency": 258,
     "last_seen": "2026-07-14"
   },
   "89822CE905F7C8A0FB0D0C99B2ADBB5C8F0BC174": {
     "seen": 50,
-    "avg_latency": 317,
+    "avg_latency": 266,
     "last_seen": "2026-07-14"
   },
   "E9CBB4C165BDE93FB6315B83938A466E7B1548AC": {
@@ -866,57 +866,57 @@
   },
   "AA4EBDECDC2BCF580E9C11E6A085D001989573FB": {
     "seen": 50,
-    "avg_latency": 111,
+    "avg_latency": 95,
     "last_seen": "2026-07-14"
   },
   "7AE3A45F5A83B9AB91D5CF9B531104C6A3412611": {
     "seen": 50,
-    "avg_latency": 298,
+    "avg_latency": 265,
     "last_seen": "2026-07-14"
   },
   "AC407EADEF780E2FBF847DF9BA65BFB9E08245E4": {
     "seen": 50,
-    "avg_latency": 199,
+    "avg_latency": 262,
     "last_seen": "2026-07-14"
   },
   "B9EFBC58646DCA0A8B04CAEC1984257810E505B5": {
     "seen": 50,
-    "avg_latency": 251,
+    "avg_latency": 191,
     "last_seen": "2026-07-14"
   },
   "5E4F1FC1B90BACEC3A9B83D55E71134636C89484": {
     "seen": 50,
-    "avg_latency": 184,
+    "avg_latency": 239,
     "last_seen": "2026-07-14"
   },
   "928C1E4289A01F34C8FB423FC32C0E77EE0F8736": {
     "seen": 50,
-    "avg_latency": 166,
+    "avg_latency": 188,
     "last_seen": "2026-07-14"
   },
   "FD756F3B8A6DCA1615D5A37D56351084A34F2E9B": {
     "seen": 50,
-    "avg_latency": 193,
+    "avg_latency": 210,
     "last_seen": "2026-07-14"
   },
   "8EBD640CBC81B1AFB1E41921D376505C29E57A06": {
     "seen": 50,
-    "avg_latency": 161,
+    "avg_latency": 155,
     "last_seen": "2026-07-14"
   },
   "4A6AD27946A7DCA8D9A8B34F3A3BD1932174D0B5": {
     "seen": 50,
-    "avg_latency": 166,
+    "avg_latency": 196,
     "last_seen": "2026-07-14"
   },
   "716EE92A2E93ED69113D8F81E98530BA9A30DC31": {
     "seen": 50,
-    "avg_latency": 200,
+    "avg_latency": 258,
     "last_seen": "2026-07-14"
   },
   "14D77B5DB61D593DB1246B1A080D25B54479F24B": {
     "seen": 50,
-    "avg_latency": 139,
+    "avg_latency": 107,
     "last_seen": "2026-07-14"
   },
   "DC22A513A846DA1EFED183EA6A4FB1D933C78B5C": {
@@ -926,17 +926,17 @@
   },
   "2417642C968964A65842FEC86F9E4A257473AAD4": {
     "seen": 50,
-    "avg_latency": 279,
+    "avg_latency": 271,
     "last_seen": "2026-07-14"
   },
   "9E40D6DB60FA802E702E8162139FCBCC8273602B": {
     "seen": 50,
-    "avg_latency": 198,
+    "avg_latency": 179,
     "last_seen": "2026-07-14"
   },
   "6F059771EFD2EE8649C2CCEF41407AEBD82B1E4B": {
     "seen": 50,
-    "avg_latency": 236,
+    "avg_latency": 211,
     "last_seen": "2026-07-14"
   },
   "312E750E1A7B4C4758A717D18F4B7D5114D48ABD": {
@@ -946,7 +946,7 @@
   },
   "1F83D3EB92B694793F1A03E2F194586B193264EB": {
     "seen": 50,
-    "avg_latency": 239,
+    "avg_latency": 210,
     "last_seen": "2026-07-14"
   },
   "996D511BC239797953F7207BAD70F31F1BCB77C5": {
@@ -956,7 +956,7 @@
   },
   "DFCF5365935A05D59B4CB92EB02045C6ACC68CE6": {
     "seen": 50,
-    "avg_latency": 226,
+    "avg_latency": 230,
     "last_seen": "2026-07-14"
   },
   "A8AC8AFD802172ED4D21B350D643F11B1850E272": {
@@ -966,22 +966,22 @@
   },
   "8F54F3A398F671E14CF36C29D087263447FC4500": {
     "seen": 50,
-    "avg_latency": 365,
+    "avg_latency": 305,
     "last_seen": "2026-07-14"
   },
   "E625B8A023A6B3395F831AC5A5D8A37203C68A67": {
     "seen": 50,
-    "avg_latency": 280,
+    "avg_latency": 267,
     "last_seen": "2026-07-14"
   },
   "2D58E21AEC9794A011827C786EFB639D3C6DF57C": {
     "seen": 50,
-    "avg_latency": 204,
+    "avg_latency": 184,
     "last_seen": "2026-07-14"
   },
   "A9C8833F3819D9D08B863225DE198D8D486C67AA": {
     "seen": 50,
-    "avg_latency": 238,
+    "avg_latency": 209,
     "last_seen": "2026-07-14"
   },
   "0794ECD3E6F76D2BA071372C5AF85BD7675E2F85": {
@@ -991,7 +991,7 @@
   },
   "7F6051103D00F6E6615C5C8D92C4B648B32331D3": {
     "seen": 50,
-    "avg_latency": 391,
+    "avg_latency": 320,
     "last_seen": "2026-07-14"
   },
   "3F94891578E8ED8E693F5C2B0442846C617D1B91": {
@@ -1001,7 +1001,7 @@
   },
   "811115E721E9B530A3BA41D3FCE6B71D64E4DC5A": {
     "seen": 50,
-    "avg_latency": 253,
+    "avg_latency": 248,
     "last_seen": "2026-07-14"
   },
   "F149BDEA475D0D4393E7775BC366DDE3EA8B52D1": {
@@ -1011,32 +1011,32 @@
   },
   "FBB706B923B0373319A9BA113CE2F6077074F558": {
     "seen": 50,
-    "avg_latency": 233,
+    "avg_latency": 310,
     "last_seen": "2026-07-14"
   },
   "21AAF4230236D815B7FF65513C29368ECC94213B": {
     "seen": 50,
-    "avg_latency": 214,
+    "avg_latency": 200,
     "last_seen": "2026-07-14"
   },
   "6EEE1B70630C2B1B30C02A1CEE18AE68C9A4A984": {
     "seen": 50,
-    "avg_latency": 338,
+    "avg_latency": 287,
     "last_seen": "2026-07-14"
   },
   "F9A95D7C6B526F64EE26C8E324942598F9D0B283": {
     "seen": 50,
-    "avg_latency": 261,
+    "avg_latency": 228,
     "last_seen": "2026-07-14"
   },
   "9E8B19CA2B5D504668242DB2B1D20BAB5DC6744E": {
     "seen": 50,
-    "avg_latency": 172,
+    "avg_latency": 241,
     "last_seen": "2026-07-14"
   },
   "DC5D70A6BF7EA18576B085142171B1DC22A90465": {
     "seen": 50,
-    "avg_latency": 189,
+    "avg_latency": 193,
     "last_seen": "2026-07-14"
   },
   "27FC184FF5612418A38DA1B038485AD7B63EB322": {
@@ -1046,72 +1046,72 @@
   },
   "10809FCDC7B96F2C40AEACE3BF2497DA76B6A494": {
     "seen": 50,
-    "avg_latency": 213,
+    "avg_latency": 206,
     "last_seen": "2026-07-14"
   },
   "2E80CA22679F0855612D4B5C6E14F515B8DBFEAC": {
     "seen": 50,
-    "avg_latency": 239,
+    "avg_latency": 240,
     "last_seen": "2026-07-14"
   },
   "656C06D42A01D25138F2F52E459C6DC27B209F73": {
     "seen": 50,
-    "avg_latency": 208,
+    "avg_latency": 203,
     "last_seen": "2026-07-14"
   },
   "D1CE1F04CB31EEECA9D1AA890C6958EB2CADAFE1": {
     "seen": 50,
-    "avg_latency": 210,
+    "avg_latency": 219,
     "last_seen": "2026-07-14"
   },
   "3AC17E97D18ADF92E9662D00EDE3B8FCCA6A6D80": {
     "seen": 50,
-    "avg_latency": 274,
+    "avg_latency": 247,
     "last_seen": "2026-07-14"
   },
   "BDE1BBC62DB8EBAE17EEF369A7271512C8B29D0F": {
     "seen": 50,
-    "avg_latency": 213,
+    "avg_latency": 232,
     "last_seen": "2026-07-14"
   },
   "CBBE8FC02F311F2656C405896F38A7E63490F4CC": {
     "seen": 50,
-    "avg_latency": 188,
+    "avg_latency": 143,
     "last_seen": "2026-07-14"
   },
   "FD973BCD35B3871A32613A8B87D23EBE15B71E5B": {
     "seen": 50,
-    "avg_latency": 296,
+    "avg_latency": 280,
     "last_seen": "2026-07-14"
   },
   "E3B0DBCEF735A148AEA73BC223B7CEB629F07A6F": {
     "seen": 50,
-    "avg_latency": 208,
+    "avg_latency": 187,
     "last_seen": "2026-07-14"
   },
   "579986ECDB2643B98A5B248B82C41B878B3E78B7": {
     "seen": 50,
-    "avg_latency": 204,
+    "avg_latency": 173,
     "last_seen": "2026-07-14"
   },
   "BFAE2CEBFB634EADC84154C4D96EF441EC27D8A4": {
     "seen": 50,
-    "avg_latency": 185,
+    "avg_latency": 236,
     "last_seen": "2026-07-14"
   },
   "A8E4362F4CA9FB044A440F99D73BC281FBF4B29C": {
     "seen": 50,
-    "avg_latency": 279,
+    "avg_latency": 246,
     "last_seen": "2026-07-14"
   },
   "82107A65941E4719DD7C2CD7B56CB4A47A8D7FFC": {
     "seen": 50,
-    "avg_latency": 264,
+    "avg_latency": 212,
     "last_seen": "2026-07-14"
   },
   "D3E98BA2555DCA5B7FA2E105167DAE4CF393533A": {
     "seen": 50,
-    "avg_latency": 330,
+    "avg_latency": 299,
     "last_seen": "2026-07-14"
   },
   "3EE00C6568B9DC9F15D1479CEB954FC8856366C3": {
@@ -1126,17 +1126,17 @@
   },
   "DA96CA0221FC90A47E228B5090C8E1BFB0B2F7C9": {
     "seen": 50,
-    "avg_latency": 211,
+    "avg_latency": 209,
     "last_seen": "2026-07-14"
   },
   "1878E0F5DAFFBD4A0F8DC75820ADB9B10E8ABAF0": {
     "seen": 50,
-    "avg_latency": 180,
+    "avg_latency": 147,
     "last_seen": "2026-07-14"
   },
   "650521A81C1885416E76B951C7ECF1651BCB60F5": {
     "seen": 50,
-    "avg_latency": 146,
+    "avg_latency": 237,
     "last_seen": "2026-07-14"
   },
   "994597905622C5622C41D5F2A8C25EB867923747": {
@@ -1146,52 +1146,52 @@
   },
   "2B7E678D33BE56697688393A202FF0A27F66F009": {
     "seen": 50,
-    "avg_latency": 108,
+    "avg_latency": 98,
     "last_seen": "2026-07-14"
   },
   "9199D9D3024783BF781704238AF48A19F247EC4D": {
     "seen": 50,
-    "avg_latency": 403,
+    "avg_latency": 358,
     "last_seen": "2026-07-14"
   },
   "7832DE6FA8EFC7DF9976B1E639D4ED1EE354D77D": {
     "seen": 50,
-    "avg_latency": 185,
+    "avg_latency": 201,
     "last_seen": "2026-07-14"
   },
   "D7ECB30D598214B98265FCFA7B68DFF22155883F": {
     "seen": 50,
-    "avg_latency": 237,
+    "avg_latency": 212,
     "last_seen": "2026-07-14"
   },
   "BAF51E0A0666DECEEE48C9072E6536EAFA87F66E": {
     "seen": 50,
-    "avg_latency": 162,
+    "avg_latency": 179,
     "last_seen": "2026-07-14"
   },
   "EE6B1DE5DEEAD9CFFE970360C3306C81BC6E8030": {
     "seen": 50,
-    "avg_latency": 206,
+    "avg_latency": 194,
     "last_seen": "2026-07-14"
   },
   "0E75D1C25A4C6E9CAA34C0326BC625F49DE76F1E": {
     "seen": 50,
-    "avg_latency": 330,
+    "avg_latency": 237,
     "last_seen": "2026-07-14"
   },
   "6456BE1DC2E03AF194C45A9212D30A7E506955B1": {
     "seen": 50,
-    "avg_latency": 216,
+    "avg_latency": 194,
     "last_seen": "2026-07-14"
   },
   "D0127814D5E23478A11BC3FDC86F058B80B370F4": {
     "seen": 50,
-    "avg_latency": 391,
+    "avg_latency": 350,
     "last_seen": "2026-07-14"
   },
   "7E59CD3DA76A403665ED162243327E6AE255411C": {
     "seen": 50,
-    "avg_latency": 229,
+    "avg_latency": 225,
     "last_seen": "2026-07-14"
   },
   "A4E5433B40D668BEDFD21C44CE23A3A2B1764E16": {
@@ -1206,22 +1206,22 @@
   },
   "69E9E63C529D8A48D7AD9F7828C02973C4C80042": {
     "seen": 50,
-    "avg_latency": 244,
+    "avg_latency": 280,
     "last_seen": "2026-07-14"
   },
   "287E26DA705E1A6180904AE7DE45842916E7DFC7": {
     "seen": 50,
-    "avg_latency": 188,
+    "avg_latency": 203,
     "last_seen": "2026-07-14"
   },
   "D9B90BDE177B7575A23163379A85AEA017F06D75": {
     "seen": 50,
-    "avg_latency": 292,
+    "avg_latency": 311,
     "last_seen": "2026-07-14"
   },
   "37AAAA91E8A34BFAEF3E3753C71996371A5F2735": {
     "seen": 50,
-    "avg_latency": 224,
+    "avg_latency": 230,
     "last_seen": "2026-07-14"
   },
   "6B91053A612A1CCEB9EDC6B129E9E610595A6E5E": {
@@ -1231,12 +1231,12 @@
   },
   "5C3BA3A8661D0EEF6480F1C76CAC9692B00D45C5": {
     "seen": 50,
-    "avg_latency": 126,
+    "avg_latency": 133,
     "last_seen": "2026-07-14"
   },
   "C26661629B7B8E05CB11D109360D02447EB9B5B5": {
     "seen": 50,
-    "avg_latency": 319,
+    "avg_latency": 350,
     "last_seen": "2026-07-14"
   },
   "254E06880E7E7A9451C03845AD13484257D9AC5A": {
@@ -1251,7 +1251,7 @@
   },
   "317099261CC9891CB227B58F0EAD425A2A3EC293": {
     "seen": 50,
-    "avg_latency": 230,
+    "avg_latency": 292,
     "last_seen": "2026-07-14"
   },
   "016E84DA084582FB15B22BF08DA1C7135CC47B07": {
@@ -1261,12 +1261,12 @@
   },
   "E23E3636EA946AE658A4441A410BDF4E30B6C1BD": {
     "seen": 50,
-    "avg_latency": 145,
+    "avg_latency": 186,
     "last_seen": "2026-07-14"
   },
   "6243BA21C8BF217602EEBB70B1C3D93DCEA2E366": {
     "seen": 50,
-    "avg_latency": 172,
+    "avg_latency": 233,
     "last_seen": "2026-07-14"
   },
   "EB25E719A7A1C1C1D5B8EB637B3831B2F1A0BE1B": {
@@ -1276,7 +1276,7 @@
   },
   "FE2F09488536336328D31621678530642F7FFBA5": {
     "seen": 50,
-    "avg_latency": 304,
+    "avg_latency": 274,
     "last_seen": "2026-07-14"
   },
   "9828521671BFBB8669D5B2FCCAD2B22D51DD20D2": {
@@ -1286,7 +1286,7 @@
   },
   "CD65DB71CA0494DEE0224994B3321C8C9E264DF9": {
     "seen": 50,
-    "avg_latency": 191,
+    "avg_latency": 159,
     "last_seen": "2026-07-14"
   },
   "74D63774E5AFB5B8C76CBCFCE41755EC7221EAC9": {
@@ -1301,7 +1301,7 @@
   },
   "67A8B9C4BC69DD0BCA4691AB06D05D329538679D": {
     "seen": 50,
-    "avg_latency": 258,
+    "avg_latency": 252,
     "last_seen": "2026-07-14"
   },
   "94F987600D8539445A78908035A331608C88D0E2": {
@@ -1311,17 +1311,17 @@
   },
   "00D62BE708A0E2A00B6A2097BE0D4B45B70F5F5C": {
     "seen": 50,
-    "avg_latency": 367,
+    "avg_latency": 380,
     "last_seen": "2026-07-14"
   },
   "22F0CA73A0E39C7A4198454C2AEC99E311237F5F": {
     "seen": 50,
-    "avg_latency": 170,
+    "avg_latency": 192,
     "last_seen": "2026-07-14"
   },
   "64ACC1122B8DC64793FB6F0BFA2593BF30F46871": {
     "seen": 50,
-    "avg_latency": 213,
+    "avg_latency": 273,
     "last_seen": "2026-07-14"
   },
   "C79871859CD2161B0C7C0B86E05BC2B327D604E1": {
@@ -1336,27 +1336,27 @@
   },
   "B9E39FA01A5C72F0774A840F91BC72C2860954E5": {
     "seen": 50,
-    "avg_latency": 226,
+    "avg_latency": 201,
     "last_seen": "2026-07-14"
   },
   "336BC480CB125457C0750840F3066AA3A547FCF1": {
     "seen": 50,
-    "avg_latency": 99,
+    "avg_latency": 87,
     "last_seen": "2026-07-14"
   },
   "225D6946243C9C5775E284B5FCCDD7D871F7A091": {
     "seen": 50,
-    "avg_latency": 183,
+    "avg_latency": 199,
     "last_seen": "2026-07-14"
   },
   "96D8B85462218884AA561992B446ED201E33BCB7": {
     "seen": 50,
-    "avg_latency": 214,
+    "avg_latency": 296,
     "last_seen": "2026-07-14"
   },
   "A00067FA2828A3084291A3C9ACBF55056D6E76C8": {
     "seen": 50,
-    "avg_latency": 203,
+    "avg_latency": 214,
     "last_seen": "2026-07-14"
   },
   "AE6BA15179AEEF64A0F543BEB7FA1BE2E91A93CF": {
@@ -1366,7 +1366,7 @@
   },
   "728BC8450D680CB3CC6D0FC30C7ED7B706237D82": {
     "seen": 50,
-    "avg_latency": 205,
+    "avg_latency": 228,
     "last_seen": "2026-07-14"
   },
   "203D8F7243CE85D0D8A6C330319D2DAD7BB72581": {
@@ -1376,12 +1376,12 @@
   },
   "3F3EAE6B80AB2ADFA0A3D05633925A5D8B270384": {
     "seen": 50,
-    "avg_latency": 124,
+    "avg_latency": 132,
     "last_seen": "2026-07-14"
   },
   "29C8E90E8FEBB7F5F67C4364224FBF4747DFA0A6": {
     "seen": 50,
-    "avg_latency": 224,
+    "avg_latency": 229,
     "last_seen": "2026-07-14"
   },
   "296A293A81CE4D77F33B801B2CD13FB7FD7EE469": {
@@ -1391,12 +1391,12 @@
   },
   "82FEF490D5080A6E7AA9D655C0AF620E31AD3A89": {
     "seen": 50,
-    "avg_latency": 472,
+    "avg_latency": 451,
     "last_seen": "2026-07-14"
   },
   "6834AC6E3E0E1B668C163F062F57ACE23D32C708": {
     "seen": 50,
-    "avg_latency": 251,
+    "avg_latency": 230,
     "last_seen": "2026-07-14"
   },
   "390DDB4BCB74FD37D79552C46EF899082E9753EB": {
@@ -1406,42 +1406,42 @@
   },
   "3AE8AD626474EAB411AC237C3A16635CB2A336EB": {
     "seen": 50,
-    "avg_latency": 315,
+    "avg_latency": 264,
     "last_seen": "2026-07-14"
   },
   "A7C450276E053E887AFAB9518397DE342C30A8E1": {
     "seen": 50,
-    "avg_latency": 219,
+    "avg_latency": 228,
     "last_seen": "2026-07-14"
   },
   "3615FF833BC04A6BFD9D74CE573FCE7EA61945BA": {
     "seen": 50,
-    "avg_latency": 165,
+    "avg_latency": 170,
     "last_seen": "2026-07-14"
   },
   "07BD9CFA8FFADD4F6E98551AA386B9303A70EA18": {
     "seen": 50,
-    "avg_latency": 230,
+    "avg_latency": 250,
     "last_seen": "2026-07-14"
   },
   "B4F79A7C39042C1623F86BDA88B89FFE8D82241A": {
     "seen": 50,
-    "avg_latency": 250,
+    "avg_latency": 314,
     "last_seen": "2026-07-14"
   },
   "34948FF5CEE141434E56A96EBE7CED96BCF62A1E": {
     "seen": 50,
-    "avg_latency": 295,
+    "avg_latency": 309,
     "last_seen": "2026-07-14"
   },
   "07E2F54F44BA1F6A0FFDFB31622E249EF7F80706": {
     "seen": 50,
-    "avg_latency": 225,
+    "avg_latency": 233,
     "last_seen": "2026-07-14"
   },
   "C94512A5874D9A1D5D1A7682A75DEB6D00430761": {
     "seen": 50,
-    "avg_latency": 217,
+    "avg_latency": 265,
     "last_seen": "2026-07-14"
   },
   "F930A6272C72C1FA7E0B2A50A27FBBAAC5D75C97": {
@@ -1451,32 +1451,32 @@
   },
   "E4EF197724288731D0586A9F11627C6699B3B32E": {
     "seen": 50,
-    "avg_latency": 338,
+    "avg_latency": 255,
     "last_seen": "2026-07-14"
   },
   "7A630FE24439AF66824BF070E84B5DF0678F6D50": {
     "seen": 50,
-    "avg_latency": 195,
+    "avg_latency": 245,
     "last_seen": "2026-07-14"
   },
   "CC1E65EC2054DF516DC992443C6474961982E541": {
     "seen": 50,
-    "avg_latency": 275,
+    "avg_latency": 233,
     "last_seen": "2026-07-14"
   },
   "6513AD8F578751540F166FAC3D39C735D4210625": {
     "seen": 50,
-    "avg_latency": 307,
+    "avg_latency": 288,
     "last_seen": "2026-07-14"
   },
   "24479DC0282DECD4EE9EDD6017B25EDDD217AAF1": {
     "seen": 50,
-    "avg_latency": 367,
+    "avg_latency": 354,
     "last_seen": "2026-07-14"
   },
   "150530E71DF116D514AF6E04C2EC18F16803FF72": {
     "seen": 50,
-    "avg_latency": 456,
+    "avg_latency": 401,
     "last_seen": "2026-07-14"
   },
   "76A48CD150165E281E80676267919BB734151680": {
@@ -1491,7 +1491,7 @@
   },
   "6D195D68B80BEDBA8FF156C5DF9064DAC1237F9A": {
     "seen": 50,
-    "avg_latency": 130,
+    "avg_latency": 109,
     "last_seen": "2026-07-14"
   },
   "5832EF5DB63B5EAD555F3DC11D5E9B4199CCB51E": {
@@ -1501,7 +1501,7 @@
   },
   "9F4A20F8061AE2C1B76A01B616A115F84F7AE0B5": {
     "seen": 50,
-    "avg_latency": 263,
+    "avg_latency": 227,
     "last_seen": "2026-07-14"
   },
   "FF1446D339735EA7BBF83549908ADB278E663335": {
@@ -1511,17 +1511,17 @@
   },
   "F115B8D1A5F6D31F90197DA9C6EC87914D7753E6": {
     "seen": 50,
-    "avg_latency": 306,
+    "avg_latency": 370,
     "last_seen": "2026-07-14"
   },
   "FC4DE196B6113AF3674114F0B5DAAEF2E3571F71": {
     "seen": 50,
-    "avg_latency": 295,
+    "avg_latency": 270,
     "last_seen": "2026-07-14"
   },
   "F829D395093B4469808CE7A660AD33AC391FB64A": {
     "seen": 50,
-    "avg_latency": 260,
+    "avg_latency": 225,
     "last_seen": "2026-07-14"
   },
   "05388A2CD3A03E9B290EE459201D863FFDC30A24": {
@@ -1531,7 +1531,7 @@
   },
   "22A2FE8461CC387B439391079EDAC5B1D55FCDBC": {
     "seen": 50,
-    "avg_latency": 77,
+    "avg_latency": 102,
     "last_seen": "2026-07-14"
   },
   "EA6EE8A8DFBD3AEE9215C810B6D6A6F2BFCCE956": {
@@ -1541,17 +1541,17 @@
   },
   "55346F385B6FB7069D1588CE842DBE88F90F90C5": {
     "seen": 50,
-    "avg_latency": 307,
+    "avg_latency": 271,
     "last_seen": "2026-07-14"
   },
   "25BF343684C39073F5D7C6748E939F20293A6DFF": {
     "seen": 50,
-    "avg_latency": 333,
+    "avg_latency": 305,
     "last_seen": "2026-07-14"
   },
   "256E9332C04D42ED35180F29227FE18DD5AC2D3D": {
     "seen": 50,
-    "avg_latency": 314,
+    "avg_latency": 271,
     "last_seen": "2026-07-14"
   },
   "AD8771A1DDE6676F19EB3BF8FE953D3E9C8CA3B0": {
@@ -1576,7 +1576,7 @@
   },
   "4BED6C44109823C0C6AAAD5BEE63D830A06D7BAC": {
     "seen": 50,
-    "avg_latency": 378,
+    "avg_latency": 424,
     "last_seen": "2026-07-14"
   },
   "8A7322A463C051DB6DC35B1159F119FC3373BB06": {
@@ -1591,12 +1591,12 @@
   },
   "1EA25CC23298EE44E48AD146CF48548881FF8947": {
     "seen": 50,
-    "avg_latency": 296,
+    "avg_latency": 325,
     "last_seen": "2026-07-14"
   },
   "76860AA01FAB2927E8805B4165C579BAB4315A5D": {
     "seen": 50,
-    "avg_latency": 162,
+    "avg_latency": 160,
     "last_seen": "2026-07-14"
   },
   "4FFB46D03330D629590C28153A8C4CEA6291837A": {
@@ -1611,7 +1611,7 @@
   },
   "B1623B3BC764CDEFAF2AB9FB0A5E924B1C3A9F09": {
     "seen": 50,
-    "avg_latency": 388,
+    "avg_latency": 320,
     "last_seen": "2026-07-14"
   },
   "5C29D874BB85E0E7DDAABB90A1808A27883A3213": {
@@ -1621,17 +1621,17 @@
   },
   "5D79968CD9F70DA8EAD72F600652FD5FA85401B5": {
     "seen": 50,
-    "avg_latency": 281,
+    "avg_latency": 245,
     "last_seen": "2026-07-14"
   },
   "F1A695C5F67D8751E2ACA8F5D10A9F08FDC1467C": {
     "seen": 50,
-    "avg_latency": 261,
+    "avg_latency": 268,
     "last_seen": "2026-07-14"
   },
   "2D16215A86522A3CFCBBBE30BFF7C706413336A9": {
     "seen": 50,
-    "avg_latency": 203,
+    "avg_latency": 186,
     "last_seen": "2026-07-14"
   },
   "5ABFC5405EAFD091BCAF4D9E4318D1FC52D531B9": {
@@ -1641,47 +1641,47 @@
   },
   "5C5413C00C3B75A1F7F3F7E200F9A9A12E90A4A8": {
     "seen": 50,
-    "avg_latency": 338,
+    "avg_latency": 329,
     "last_seen": "2026-07-14"
   },
   "2FA8E2BF12884D62728BF3186ACF9762E9A9B310": {
     "seen": 50,
-    "avg_latency": 282,
+    "avg_latency": 341,
     "last_seen": "2026-07-14"
   },
   "4869FCBDBCC52D86650601965430648263613826": {
     "seen": 50,
-    "avg_latency": 319,
+    "avg_latency": 348,
     "last_seen": "2026-07-14"
   },
   "73E852EFCF86925143097910ED0F9BDAA7901184": {
     "seen": 50,
-    "avg_latency": 193,
+    "avg_latency": 161,
     "last_seen": "2026-07-14"
   },
   "1B6E8860E568D0227A9FCA7D16BAF468A8C02C52": {
     "seen": 50,
-    "avg_latency": 388,
+    "avg_latency": 318,
     "last_seen": "2026-07-14"
   },
   "67F225F0B72EF91995D8B57C1FE358291BFD8F32": {
     "seen": 50,
-    "avg_latency": 239,
+    "avg_latency": 299,
     "last_seen": "2026-07-14"
   },
   "0F83690D92E4326915D868B8C2EFC9D8526B41B5": {
     "seen": 50,
-    "avg_latency": 255,
+    "avg_latency": 259,
     "last_seen": "2026-07-14"
   },
   "ACE4CD0CCD8DDC93475D3BDDD8DC431AE7C1617A": {
     "seen": 50,
-    "avg_latency": 87,
+    "avg_latency": 105,
     "last_seen": "2026-07-14"
   },
   "F9A3BDE673AFCB9FB835724766A388647A109C6A": {
     "seen": 50,
-    "avg_latency": 229,
+    "avg_latency": 208,
     "last_seen": "2026-07-14"
   },
   "708E39FB263E311F6F64A933D0B54750CD608131": {
@@ -1691,17 +1691,17 @@
   },
   "23D3FEE4C00C3A0DB47D77C65E4EA301484B5FA3": {
     "seen": 50,
-    "avg_latency": 191,
+    "avg_latency": 249,
     "last_seen": "2026-07-14"
   },
   "D6B9EC832A0D9E6A181A62D4D72CC3A9FEDF60CB": {
     "seen": 50,
-    "avg_latency": 231,
+    "avg_latency": 205,
     "last_seen": "2026-07-14"
   },
   "D8DE7160527CAFA34B6EBA47328ABA7983B708CA": {
     "seen": 50,
-    "avg_latency": 201,
+    "avg_latency": 208,
     "last_seen": "2026-07-14"
   },
   "F7CB1A75ACBFC452C816DC81010B1BF6584BE105": {
@@ -1721,32 +1721,32 @@
   },
   "B8B20E8D2EDDCD1C2A6C927FE36B722B594058CE": {
     "seen": 50,
-    "avg_latency": 341,
+    "avg_latency": 354,
     "last_seen": "2026-07-14"
   },
   "21BC7831861AB989FCB3F367BA6B9B82CBA43C80": {
     "seen": 50,
-    "avg_latency": 231,
+    "avg_latency": 256,
     "last_seen": "2026-07-14"
   },
   "D1036FDBE0D40F9C3297EF640FE9DE6427F7C3D5": {
     "seen": 50,
-    "avg_latency": 91,
+    "avg_latency": 87,
     "last_seen": "2026-07-14"
   },
   "2EDD7FB5144BFDB37E39D21DDC25A4C362DCEE41": {
     "seen": 50,
-    "avg_latency": 276,
+    "avg_latency": 234,
     "last_seen": "2026-07-14"
   },
   "6E51423BA6693C627F12CBA99951B05123CBFE76": {
     "seen": 50,
-    "avg_latency": 283,
+    "avg_latency": 294,
     "last_seen": "2026-07-14"
   },
   "867CC4E415999336F7803F9B5E468B208D59C9DC": {
     "seen": 50,
-    "avg_latency": 247,
+    "avg_latency": 246,
     "last_seen": "2026-07-14"
   },
   "0F94DC2DE9ADE4CE6B053ABE692FA3A0B056A552": {
@@ -1766,17 +1766,17 @@
   },
   "239826716C5BA8AAC6C501AD54BB853FDDF161B2": {
     "seen": 50,
-    "avg_latency": 303,
+    "avg_latency": 288,
     "last_seen": "2026-07-14"
   },
   "9735DAE37918DD9F0BA9CF56D336294BCB4207CC": {
     "seen": 50,
-    "avg_latency": 309,
+    "avg_latency": 270,
     "last_seen": "2026-07-14"
   },
   "7CA829973901F71B93BBF2014C0EBEA366C21A2B": {
     "seen": 50,
-    "avg_latency": 134,
+    "avg_latency": 112,
     "last_seen": "2026-07-14"
   },
   "DAEFF07E181A420069F9944C12BAA0DE6FD59B6D": {
@@ -1786,32 +1786,32 @@
   },
   "D63A58CD74E68A6A540133886804EA3EE7A5F6E7": {
     "seen": 50,
-    "avg_latency": 333,
+    "avg_latency": 304,
     "last_seen": "2026-07-14"
   },
   "BFD5F83BE97EEAF8B3B8505B036ED7BB8A91E850": {
     "seen": 50,
-    "avg_latency": 228,
+    "avg_latency": 212,
     "last_seen": "2026-07-14"
   },
   "C2542268C0F438A725E5225781B689A33F12C495": {
     "seen": 50,
-    "avg_latency": 276,
+    "avg_latency": 271,
     "last_seen": "2026-07-14"
   },
   "D6B1C7DA191988EFC9D8893A92035EA5BAA943B3": {
     "seen": 50,
-    "avg_latency": 287,
+    "avg_latency": 298,
     "last_seen": "2026-07-14"
   },
   "4785BF3F20D51CB816CDDAA2D03834B100619C14": {
     "seen": 50,
-    "avg_latency": 267,
+    "avg_latency": 240,
     "last_seen": "2026-07-14"
   },
   "9EFCE13C79DFC417FE03CB560455292CD04A67C8": {
     "seen": 50,
-    "avg_latency": 342,
+    "avg_latency": 376,
     "last_seen": "2026-07-14"
   },
   "DAB358F0A3119280C553373C2950E341A56DD2EE": {
@@ -1821,7 +1821,7 @@
   },
   "30C2B201652AF9F2D14EBAEBDEA4D69171C63C02": {
     "seen": 50,
-    "avg_latency": 295,
+    "avg_latency": 257,
     "last_seen": "2026-07-14"
   },
   "F1CF5DE3C36E879573C87295017AE25E60183EEA": {
@@ -1831,7 +1831,7 @@
   },
   "1CEE0C83F732C2574EC438CC36DB20D0FF4D950E": {
     "seen": 50,
-    "avg_latency": 212,
+    "avg_latency": 165,
     "last_seen": "2026-07-14"
   },
   "28F5A0325B50F3EFB5FCC73194FCBF9D4972248E": {
@@ -1856,32 +1856,32 @@
   },
   "3661913DEAB8BF9FEE57CA3AE290D848D7C7AC78": {
     "seen": 50,
-    "avg_latency": 256,
+    "avg_latency": 295,
     "last_seen": "2026-07-14"
   },
   "2384767634FE48643449A83A5AB866CF79A97332": {
     "seen": 50,
-    "avg_latency": 340,
+    "avg_latency": 287,
     "last_seen": "2026-07-14"
   },
   "E4BFB6D0104B39023047F0DBEC6968D342C663B7": {
     "seen": 50,
-    "avg_latency": 210,
+    "avg_latency": 219,
     "last_seen": "2026-07-14"
   },
   "2620ECB36C504BB1FD1AA75E73F3BA068514E842": {
     "seen": 50,
-    "avg_latency": 221,
+    "avg_latency": 266,
     "last_seen": "2026-07-14"
   },
   "159E2EE0E954B669865AAF963EA534884850E6AD": {
     "seen": 50,
-    "avg_latency": 186,
+    "avg_latency": 148,
     "last_seen": "2026-07-14"
   },
   "BAAE1B45E5042FE9177CFDABF3496C4ECBA06368": {
     "seen": 50,
-    "avg_latency": 196,
+    "avg_latency": 220,
     "last_seen": "2026-07-14"
   },
   "86134142630727E950C41E151255ECFABFA6F30C": {
@@ -1891,17 +1891,17 @@
   },
   "B27592A9DA08DCB871F14F9247299F9FBA72D05F": {
     "seen": 50,
-    "avg_latency": 217,
+    "avg_latency": 196,
     "last_seen": "2026-07-14"
   },
   "259D40B5345BD8ED89309E065022FFB37A6F0368": {
     "seen": 50,
-    "avg_latency": 342,
+    "avg_latency": 309,
     "last_seen": "2026-07-14"
   },
   "294AF2AD929814DB41F9AB6A8B9D0E17C6EFA6B7": {
     "seen": 50,
-    "avg_latency": 247,
+    "avg_latency": 244,
     "last_seen": "2026-07-14"
   },
   "6EBCF6B02DA2B982F4080A7119D737366AFB74FA": {
@@ -1911,12 +1911,12 @@
   },
   "AC21198DB43D0AA09A0F1EBC07CC9AA2A1976B1A": {
     "seen": 50,
-    "avg_latency": 317,
+    "avg_latency": 294,
     "last_seen": "2026-07-14"
   },
   "EC54CEDD9B104A3E62699B935F1A10F5F1FF3B60": {
     "seen": 50,
-    "avg_latency": 198,
+    "avg_latency": 189,
     "last_seen": "2026-07-14"
   },
   "EC778BE8C1C240CFC9F78992C533B1BD75F9CF75": {
@@ -1926,7 +1926,7 @@
   },
   "FC42030D6ED79EEDDB7FBF12BA12901C9C72A159": {
     "seen": 50,
-    "avg_latency": 204,
+    "avg_latency": 235,
     "last_seen": "2026-07-14"
   },
   "086208823845DA4F5272C483644FB4BCC5514179": {
@@ -1936,22 +1936,22 @@
   },
   "B952B399D666682A9DE0AC4920D33B33F63A071B": {
     "seen": 50,
-    "avg_latency": 205,
+    "avg_latency": 230,
     "last_seen": "2026-07-14"
   },
   "62197C08718EA845E766813277B42BA3BD963ABB": {
     "seen": 50,
-    "avg_latency": 306,
+    "avg_latency": 233,
     "last_seen": "2026-07-14"
   },
   "AB657AF742B12251930FC3F4BCB19D9B4223220A": {
     "seen": 50,
-    "avg_latency": 314,
+    "avg_latency": 286,
     "last_seen": "2026-07-14"
   },
   "5D9EE7AA730F39263D04C90AAF23C66AB013E1C0": {
     "seen": 50,
-    "avg_latency": 234,
+    "avg_latency": 238,
     "last_seen": "2026-07-14"
   },
   "A59D0D4C75A4CBD163E4C8FFE595D540741A02FB": {
@@ -1976,7 +1976,7 @@
   },
   "F805F6B4E5E203EFE2A7FFB1E5042AFE8BD986B4": {
     "seen": 50,
-    "avg_latency": 178,
+    "avg_latency": 189,
     "last_seen": "2026-07-14"
   },
   "CDAD6FCC9B1325346BBCB493D97E68D00DC82389": {
@@ -1986,32 +1986,32 @@
   },
   "B55A418B4F30181ED304EB2698EE58D283BEE5BF": {
     "seen": 50,
-    "avg_latency": 275,
+    "avg_latency": 321,
     "last_seen": "2026-07-14"
   },
   "254A5B1978409ED1D80B68751EF483A3E7E33058": {
     "seen": 50,
-    "avg_latency": 283,
+    "avg_latency": 278,
     "last_seen": "2026-07-14"
   },
   "649B458222B1DB29DD1CFF0BF84DBD46019E260F": {
     "seen": 50,
-    "avg_latency": 113,
+    "avg_latency": 188,
     "last_seen": "2026-07-14"
   },
   "85039DCAC3BBFB86A09BB0C58878FECD79AE33DA": {
     "seen": 50,
-    "avg_latency": 187,
+    "avg_latency": 175,
     "last_seen": "2026-07-14"
   },
   "0C6DDE3F9FC377A5E69DC044E81C857277148D71": {
     "seen": 50,
-    "avg_latency": 288,
+    "avg_latency": 248,
     "last_seen": "2026-07-14"
   },
   "2B1867AF1343212CBD414B45FC9400CE63062E59": {
     "seen": 50,
-    "avg_latency": 245,
+    "avg_latency": 218,
     "last_seen": "2026-07-14"
   },
   "40FE3DB9800272F9CDC76422F8ED7883280EE96D": {
@@ -2021,22 +2021,22 @@
   },
   "9B5D1381000B3195BF2C0400ADE89A4CA9DE4EF1": {
     "seen": 50,
-    "avg_latency": 236,
+    "avg_latency": 316,
     "last_seen": "2026-07-14"
   },
   "C081FB23DBBAA3297D7BB0C002C3A8CE72C55C40": {
     "seen": 50,
-    "avg_latency": 234,
+    "avg_latency": 236,
     "last_seen": "2026-07-14"
   },
   "886237343D8956C90CA31DD60428D52B1EC34CE7": {
     "seen": 50,
-    "avg_latency": 326,
+    "avg_latency": 340,
     "last_seen": "2026-07-14"
   },
   "5C70E3D1E109F2192C07CDE8F3E3E3708C6CA68F": {
     "seen": 50,
-    "avg_latency": 139,
+    "avg_latency": 168,
     "last_seen": "2026-07-14"
   },
   "97A77E789F724E9E008BEEED993CC0B6DB2D085F": {
@@ -2046,12 +2046,12 @@
   },
   "1C449CEA7CE065BB8C16F766A05382105B8957A7": {
     "seen": 50,
-    "avg_latency": 196,
+    "avg_latency": 242,
     "last_seen": "2026-07-14"
   },
   "3FD2D70C4E7F8D5470080B6BABA21376F2B478A1": {
     "seen": 50,
-    "avg_latency": 103,
+    "avg_latency": 82,
     "last_seen": "2026-07-14"
   },
   "5A66B5FA911B50588C9CBB52CAC4D7C9CD0A6C71": {
@@ -2061,7 +2061,7 @@
   },
   "18AFEA11065FFAF045062A373654A3ADE050B087": {
     "seen": 50,
-    "avg_latency": 216,
+    "avg_latency": 236,
     "last_seen": "2026-07-14"
   },
   "B3A626A7D51B090FCF71834F31EF7402DF97F328": {
@@ -2181,7 +2181,7 @@
   },
   "503868C118AB3582C643D6D0DEC0044254DAE0AC": {
     "seen": 50,
-    "avg_latency": 221,
+    "avg_latency": 204,
     "last_seen": "2026-07-14"
   },
   "010C03B1A7FA5CEF8885444B527BEA3EFA59A85E": {
@@ -2206,7 +2206,7 @@
   },
   "F9A4DE8B36FA492A05277FAD58F93F5EFEA1E926": {
     "seen": 50,
-    "avg_latency": 227,
+    "avg_latency": 198,
     "last_seen": "2026-07-14"
   },
   "57DD323A976B78B7AB71297FA855A1DB5AA84E26": {
@@ -2221,17 +2221,17 @@
   },
   "C0F8C1BD5CB3FDCC13DE22796336A77E3AB4AC9B": {
     "seen": 50,
-    "avg_latency": 211,
+    "avg_latency": 216,
     "last_seen": "2026-07-14"
   },
   "66D373EDE26F23AB456C4B6D92DC526199E0D05B": {
     "seen": 50,
-    "avg_latency": 246,
+    "avg_latency": 216,
     "last_seen": "2026-07-14"
   },
   "F228C0A440F33D338C8A38C9313BE5587533CD2B": {
     "seen": 50,
-    "avg_latency": 175,
+    "avg_latency": 185,
     "last_seen": "2026-07-14"
   },
   "C0C333B87E110E3BA49DB70E9D504688FAD5D556": {
@@ -2256,17 +2256,17 @@
   },
   "3C3893086B27E879778E4A6275E5230AA49132E9": {
     "seen": 50,
-    "avg_latency": 290,
+    "avg_latency": 354,
     "last_seen": "2026-07-14"
   },
   "7EECCE30E1BDD02130CEA29F9E620B0771F6768E": {
     "seen": 50,
-    "avg_latency": 248,
+    "avg_latency": 255,
     "last_seen": "2026-07-14"
   },
   "118F64262B770E8B04CD9BC412B5EC5F2D0E817E": {
     "seen": 50,
-    "avg_latency": 190,
+    "avg_latency": 196,
     "last_seen": "2026-07-14"
   },
   "A86A4211D1A2499811D765437E61205A642EEE6D": {
@@ -2281,7 +2281,7 @@
   },
   "B524273A55048AA713C95154C55E3024A48C041A": {
     "seen": 50,
-    "avg_latency": 148,
+    "avg_latency": 161,
     "last_seen": "2026-07-14"
   },
   "6017A229DDAABB13473590A8BA578BCC11EE2B32": {
@@ -2291,7 +2291,7 @@
   },
   "DE519892E4C87574951BC87FA04FABE1F40696C5": {
     "seen": 50,
-    "avg_latency": 107,
+    "avg_latency": 103,
     "last_seen": "2026-07-14"
   },
   "0C2FA46AA6264D1F4AC1AC84A0BAF4CFFBACB296": {
@@ -2306,7 +2306,7 @@
   },
   "5592D9B167ADBA7F41A953413082120E5261F6D3": {
     "seen": 50,
-    "avg_latency": 143,
+    "avg_latency": 201,
     "last_seen": "2026-07-14"
   },
   "6D69550EE324E4F74BFB204A097E64985507E0C0": {
@@ -2316,7 +2316,7 @@
   },
   "75363F7556DE0570F32BCF0AC1AFCC7D35E80751": {
     "seen": 50,
-    "avg_latency": 243,
+    "avg_latency": 285,
     "last_seen": "2026-07-14"
   },
   "0CABFA0804ED8FD2486AA1FF78F672EC839CD3C7": {
@@ -2336,7 +2336,7 @@
   },
   "E9412A0B19EB519042377976F3C33AA02BA1765D": {
     "seen": 50,
-    "avg_latency": 235,
+    "avg_latency": 248,
     "last_seen": "2026-07-14"
   },
   "964400BD72F85E4EF3541DD8578E9131EA628DD8": {
@@ -2391,7 +2391,7 @@
   },
   "E0E97805415D1FE8E7DB45C5BC23A5BB53DB12AA": {
     "seen": 50,
-    "avg_latency": 134,
+    "avg_latency": 137,
     "last_seen": "2026-07-14"
   },
   "86A8801C84255EC714EF2AD4E4E665598800ABEF": {
@@ -2401,7 +2401,7 @@
   },
   "FE3A1689F7C0A05EA2A19ED29CCF0C1232FB3C80": {
     "seen": 50,
-    "avg_latency": 290,
+    "avg_latency": 283,
     "last_seen": "2026-07-14"
   },
   "47CD157813D346BCC2AC317B2BD6D0E938713747": {
@@ -2411,22 +2411,22 @@
   },
   "63BC6E53914453BF8C4355082EC907E72E68B7C4": {
     "seen": 50,
-    "avg_latency": 374,
+    "avg_latency": 323,
     "last_seen": "2026-07-14"
   },
   "2820F70D56289492E58A306B9A48B255EE17E030": {
     "seen": 50,
-    "avg_latency": 258,
+    "avg_latency": 254,
     "last_seen": "2026-07-14"
   },
   "A012A856BEB4A138C38BA88972746E3C6F43D325": {
     "seen": 50,
-    "avg_latency": 221,
+    "avg_latency": 227,
     "last_seen": "2026-07-14"
   },
   "08F510671137D7F2AA6E9E805A30DA8D72EC8C25": {
     "seen": 50,
-    "avg_latency": 173,
+    "avg_latency": 240,
     "last_seen": "2026-07-14"
   },
   "E4487F2AF77CE7FFD86774E0A3E4F7BDDB186B0B": {
@@ -2441,12 +2441,12 @@
   },
   "19BFCD8AD90626A7B5293B9914ACC203C48A111A": {
     "seen": 50,
-    "avg_latency": 196,
+    "avg_latency": 185,
     "last_seen": "2026-07-14"
   },
   "8406AAD272684FAC6C1ED55045A7459772A6E9C9": {
     "seen": 50,
-    "avg_latency": 364,
+    "avg_latency": 331,
     "last_seen": "2026-07-14"
   },
   "03896FCEDCF1071D5820D987CC854B71C5F9C5FB": {
@@ -2456,7 +2456,7 @@
   },
   "9223AA23B09DF3BC8B90679F1EC6399918799FF9": {
     "seen": 50,
-    "avg_latency": 339,
+    "avg_latency": 282,
     "last_seen": "2026-07-14"
   },
   "CB83451C5B2ECBF2ED4B15E5845EF8469210FB1D": {
@@ -2471,12 +2471,12 @@
   },
   "6B84EEA5CE85F8CA28102B0134851F0928921EC2": {
     "seen": 50,
-    "avg_latency": 233,
+    "avg_latency": 235,
     "last_seen": "2026-07-14"
   },
   "F31C3DDFB2ECF41BEF693EC866BFE6B7E9A06A90": {
     "seen": 50,
-    "avg_latency": 219,
+    "avg_latency": 294,
     "last_seen": "2026-07-14"
   },
   "A368D0B904F904DCBCA0FE0DBAAA156E9A08E9D4": {
@@ -2486,17 +2486,17 @@
   },
   "35B1F1F6F1632381AFE5C7CAC4C1754AC361B036": {
     "seen": 50,
-    "avg_latency": 210,
+    "avg_latency": 249,
     "last_seen": "2026-07-14"
   },
   "F76D106EDD805122C372156C4E9CA06699E196F6": {
     "seen": 50,
-    "avg_latency": 279,
+    "avg_latency": 239,
     "last_seen": "2026-07-14"
   },
   "7C6F1961DB10B209ECB2AEFF16C928A9CCB71AE1": {
     "seen": 50,
-    "avg_latency": 270,
+    "avg_latency": 317,
     "last_seen": "2026-07-14"
   },
   "381A2EA790E55F7D6FFD40367FE490D4A6ECE7A9": {
@@ -2531,12 +2531,12 @@
   },
   "78C6BE42F1488322799C5ADF110309968FBCC0CF": {
     "seen": 50,
-    "avg_latency": 360,
+    "avg_latency": 382,
     "last_seen": "2026-07-14"
   },
   "055A92BACF4534B60411277048D75520928E8EE6": {
     "seen": 50,
-    "avg_latency": 357,
+    "avg_latency": 416,
     "last_seen": "2026-07-14"
   },
   "52C9C1706316EEDE5F178F55320551C13E55CCB7": {
@@ -2561,7 +2561,7 @@
   },
   "BEB2A2D0164AFD7F88882D97980DA65DF865990D": {
     "seen": 50,
-    "avg_latency": 254,
+    "avg_latency": 248,
     "last_seen": "2026-07-14"
   },
   "C038344E981F9BA209E420EAC4ECE1D4193BB355": {
@@ -2571,7 +2571,7 @@
   },
   "D5D2F897C4B28EE2FCCA7551A3847AE5C2267958": {
     "seen": 50,
-    "avg_latency": 238,
+    "avg_latency": 345,
     "last_seen": "2026-07-14"
   },
   "760B28D13AA34A24B5C563307432DD4DA4FAAE98": {
@@ -2586,12 +2586,12 @@
   },
   "3D5686160B002004FEC8C1DF2DC8A3D09E7C74F4": {
     "seen": 50,
-    "avg_latency": 202,
+    "avg_latency": 157,
     "last_seen": "2026-07-14"
   },
   "09F8EE9BBF2224564255A69C75D2BDED0C11ED69": {
     "seen": 50,
-    "avg_latency": 241,
+    "avg_latency": 262,
     "last_seen": "2026-07-14"
   },
   "9F7C9CBD064409E0E87DB3CC3B674841BE81B1EE": {
@@ -2601,22 +2601,22 @@
   },
   "70BF7C1E976460AD96D21EE68B722CBAA822025B": {
     "seen": 50,
-    "avg_latency": 200,
+    "avg_latency": 216,
     "last_seen": "2026-07-14"
   },
   "0172044D029DD6DF4B36CF399F7DED81F368F8D2": {
     "seen": 50,
-    "avg_latency": 92,
+    "avg_latency": 180,
     "last_seen": "2026-07-14"
   },
   "D7D36B82E37D7B6D87C0F1B41CB87378D405BA88": {
     "seen": 50,
-    "avg_latency": 262,
+    "avg_latency": 264,
     "last_seen": "2026-07-14"
   },
   "DE50E8CB8FF7B85A28A6F5711F20124F15F28DFE": {
     "seen": 50,
-    "avg_latency": 342,
+    "avg_latency": 311,
     "last_seen": "2026-07-14"
   },
   "938EE7D19F8DFA3D4A65EA63C00295D460FC9362": {
@@ -2626,7 +2626,7 @@
   },
   "EBAF32ACF26C516BEF1815C53EB71A177D37A7C4": {
     "seen": 50,
-    "avg_latency": 193,
+    "avg_latency": 194,
     "last_seen": "2026-07-14"
   },
   "9E5688924CEB539A9301E9472C6B6D741B358210": {
@@ -2721,17 +2721,17 @@
   },
   "808E86271077E90D4F2795FD5FF9E5D2975F9EDE": {
     "seen": 50,
-    "avg_latency": 177,
+    "avg_latency": 142,
     "last_seen": "2026-07-14"
   },
   "AB1F924F90723494D7BFBEEB16B171F1436DD6F3": {
     "seen": 50,
-    "avg_latency": 279,
+    "avg_latency": 267,
     "last_seen": "2026-07-14"
   },
   "5B9DBF3FB7856D58F290CCE60902E257B52599A3": {
     "seen": 50,
-    "avg_latency": 279,
+    "avg_latency": 267,
     "last_seen": "2026-07-14"
   },
   "F5D28C8C3A00D29A1A8818E83634437CF8218F69": {
@@ -2741,12 +2741,12 @@
   },
   "ED7749BF8130126123F85DB5934C374178415C8B": {
     "seen": 50,
-    "avg_latency": 262,
+    "avg_latency": 357,
     "last_seen": "2026-07-14"
   },
   "E1FE1E1EBF704DB6D9F450895E449D86255DD8DE": {
     "seen": 50,
-    "avg_latency": 233,
+    "avg_latency": 208,
     "last_seen": "2026-07-14"
   },
   "37CB0163F9BC8454F190DE8E903BBB2CD856C054": {
@@ -2756,7 +2756,7 @@
   },
   "9FB06D6117620EB060A29FE93E3CE889197A6EF7": {
     "seen": 50,
-    "avg_latency": 159,
+    "avg_latency": 126,
     "last_seen": "2026-07-14"
   },
   "3C2CCA3A6C0DD1BE188A7407D3E3E3DA06301FEC": {
@@ -2766,7 +2766,7 @@
   },
   "F56C6CC6A0ACDC21A91B39A6553C0DD0B68A2884": {
     "seen": 50,
-    "avg_latency": 337,
+    "avg_latency": 319,
     "last_seen": "2026-07-14"
   },
   "B679D14EAED9B74543048CB7C9C8184596B3959F": {
@@ -2776,22 +2776,22 @@
   },
   "F1555089C07B70D7B9513FE19F2A630D03460FAC": {
     "seen": 50,
-    "avg_latency": 267,
+    "avg_latency": 239,
     "last_seen": "2026-07-14"
   },
   "0C3517B8D76701F136F9D54C4257DA43B726D241": {
     "seen": 50,
-    "avg_latency": 592,
+    "avg_latency": 591,
     "last_seen": "2026-07-14"
   },
   "9AD05E353AD70C6BA556A5A2E63DFAC6F25E111B": {
     "seen": 50,
-    "avg_latency": 243,
+    "avg_latency": 255,
     "last_seen": "2026-07-14"
   },
   "2AD1A69A93DF551AD07096060686CC8E111213F9": {
     "seen": 50,
-    "avg_latency": 142,
+    "avg_latency": 118,
     "last_seen": "2026-07-14"
   },
   "A9BBE0FC754A65401CB12BAC3BC4DEE85CFBB94F": {
@@ -2806,37 +2806,37 @@
   },
   "6FF5C5C1AE210431C5E182B73D8EB858CEA65B33": {
     "seen": 50,
-    "avg_latency": 209,
+    "avg_latency": 251,
     "last_seen": "2026-07-14"
   },
   "D1897721C00C652677BE4A804CFCEAE9E8D9645D": {
     "seen": 50,
-    "avg_latency": 182,
+    "avg_latency": 169,
     "last_seen": "2026-07-14"
   },
   "FCB4444D19C32E92FCC891F761953F2D16B94234": {
     "seen": 50,
-    "avg_latency": 171,
+    "avg_latency": 158,
     "last_seen": "2026-07-14"
   },
   "6D6EE364C9D61B1160FFCF20A48CDE28D7B98E30": {
     "seen": 50,
-    "avg_latency": 197,
+    "avg_latency": 190,
     "last_seen": "2026-07-14"
   },
   "499094AC5A464C35262BCF26AC361964A7EDD13C": {
     "seen": 50,
-    "avg_latency": 392,
+    "avg_latency": 370,
     "last_seen": "2026-07-14"
   },
   "84EC89D94CD56DD7EE8B777403A0986C010E566D": {
     "seen": 50,
-    "avg_latency": 221,
+    "avg_latency": 258,
     "last_seen": "2026-07-14"
   },
   "633AE112492CFFBCDF24F1978B859C1B2B610E11": {
     "seen": 50,
-    "avg_latency": 330,
+    "avg_latency": 293,
     "last_seen": "2026-07-14"
   },
   "E867187EE0B9D6F531395A41B5ECC4D5CD3BAB23": {
@@ -2846,17 +2846,17 @@
   },
   "741E17F1717B1083669AD926D53F1B1394C0C9B2": {
     "seen": 50,
-    "avg_latency": 338,
+    "avg_latency": 316,
     "last_seen": "2026-07-14"
   },
   "98F646567F17A9B37F799CD55BC142FF58C3A88D": {
     "seen": 50,
-    "avg_latency": 186,
+    "avg_latency": 183,
     "last_seen": "2026-07-14"
   },
   "55CD815CB72FD47D2AB89AE4FCA4ACFBCFCC8503": {
     "seen": 50,
-    "avg_latency": 333,
+    "avg_latency": 371,
     "last_seen": "2026-07-14"
   },
   "7AA2DC42A33F81EBAEF62AE6A6692CFBDE61C8DC": {
@@ -2871,7 +2871,7 @@
   },
   "A61ECF8D7E06423EDBC67239F1220A3E9B0770DB": {
     "seen": 50,
-    "avg_latency": 239,
+    "avg_latency": 237,
     "last_seen": "2026-07-14"
   },
   "97EAB17550B88B6BB6692671B48B76383CE0B565": {
@@ -2886,12 +2886,12 @@
   },
   "B90A053E497D4D97795563A42DBAA0D6A16D3FB0": {
     "seen": 50,
-    "avg_latency": 271,
+    "avg_latency": 255,
     "last_seen": "2026-07-14"
   },
   "EDE7C9E92E631A74BDD5BD091D0D0FC16383EAE3": {
     "seen": 50,
-    "avg_latency": 200,
+    "avg_latency": 272,
     "last_seen": "2026-07-14"
   },
   "7092A30164009EEF7E1F633B7044E25509CA517D": {
@@ -2901,12 +2901,12 @@
   },
   "CC6686E824F09EBF056B4832328AE0FE7337385A": {
     "seen": 50,
-    "avg_latency": 221,
+    "avg_latency": 207,
     "last_seen": "2026-07-14"
   },
   "D8B86CCA6A0C73C486AD7EC4A9A90C086817804C": {
     "seen": 50,
-    "avg_latency": 106,
+    "avg_latency": 128,
     "last_seen": "2026-07-14"
   },
   "5313D0B803832F66262954F7D1DBF78FB64F5773": {
@@ -2920,58 +2920,53 @@
     "last_seen": "2026-07-09"
   },
   "2E18F504F27DFC23B5A716BB157C281874265AD1": {
-    "seen": 39,
-    "avg_latency": 193,
+    "seen": 40,
+    "avg_latency": 150,
     "last_seen": "2026-07-14"
   },
   "073386E7DF7406AA248CDC978ED6FE25C1048645": {
-    "seen": 47,
-    "avg_latency": 312,
+    "seen": 49,
+    "avg_latency": 327,
     "last_seen": "2026-07-14"
   },
   "3CE205F7D7DE61E6E1787024EEDC03DCCFCA3C6A": {
-    "seen": 11,
-    "avg_latency": 385,
+    "seen": 12,
+    "avg_latency": 421,
     "last_seen": "2026-07-14"
   },
   "18229D54EA8FE35339A8B7EFBA1300B3AF24D13B": {
-    "seen": 6,
-    "avg_latency": 1013,
+    "seen": 7,
+    "avg_latency": 1085,
     "last_seen": "2026-07-14"
   },
   "10C8BD5CFB3DCA04455A7B63BBA8F510362D8ED4": {
-    "seen": 4,
-    "avg_latency": 316,
-    "last_seen": "2026-07-14"
-  },
-  "900844EDD4FCFA9F7CE18C391A777F12FBFE1C1E": {
-    "seen": 1,
-    "avg_latency": 1022,
-    "last_seen": "2026-07-14"
-  },
-  "DB9E6D6AB7A3C7C47682F31F6A7D5F819BA9276E": {
-    "seen": 1,
-    "avg_latency": 1447,
-    "last_seen": "2026-07-14"
-  },
-  "C1071E13650A41F1B4A1D93C089D4EF685DD1833": {
-    "seen": 1,
-    "avg_latency": 3756,
-    "last_seen": "2026-07-14"
-  },
-  "291666C8F9E8736771E046DAC04FA4DA35F89467": {
-    "seen": 1,
-    "avg_latency": 670,
+    "seen": 5,
+    "avg_latency": 266,
     "last_seen": "2026-07-14"
   },
   "88C9B6F63D50B63FC5E1DE2F5423FCDA2C0AC5EB": {
     "seen": 2,
-    "avg_latency": 646,
+    "avg_latency": 894,
     "last_seen": "2026-07-14"
   },
-  "E1094D987D5116EE9D77124AD1500CF59B41628A": {
+  "900844EDD4FCFA9F7CE18C391A777F12FBFE1C1E": {
     "seen": 1,
-    "avg_latency": 610,
+    "avg_latency": 924,
+    "last_seen": "2026-07-14"
+  },
+  "C1071E13650A41F1B4A1D93C089D4EF685DD1833": {
+    "seen": 2,
+    "avg_latency": 1043,
+    "last_seen": "2026-07-14"
+  },
+  "DB9E6D6AB7A3C7C47682F31F6A7D5F819BA9276E": {
+    "seen": 1,
+    "avg_latency": 1510,
+    "last_seen": "2026-07-14"
+  },
+  "291666C8F9E8736771E046DAC04FA4DA35F89467": {
+    "seen": 1,
+    "avg_latency": 752,
     "last_seen": "2026-07-14"
   }
 }
